@@ -1,0 +1,27 @@
+﻿.tableFixHead {
+    overflow-y: auto;
+    min-height: 83vh !important;
+    height: 83vh !important;
+}
+
+.emptyTDHeight {
+    height: 25px !important;
+}
+
+.form-control {
+    padding: 0rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.form-select {
+    padding: 0rem 2.25rem 0.375rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.cls-listBox{
+    width : 100%;
+}
+
+.cls-textBoxWidth{
+    width : auto;
+}

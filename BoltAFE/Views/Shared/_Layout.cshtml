@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    @Html.Partial("_Loader")
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-2" href="@Url.Action("Index","Dashboard")">BoltAFE</a>
+            <a href="#" id="userEmail" class="float-end ms-1" style="color: wheat; font-size: smaller">User: @HttpContext.Current.Session["Email"]</a>
+            <input type="hidden" id="userID" value="@HttpContext.Current.Session["UserId"]" />
+            <div class="d-flex"></div>
+            <div class="d-flex"></div>
+            <div class="d-flex">
+                <div id="selectedMenu" class="mt-2" style="color:wheat"></div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse dropend navbar-collapse me-5" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" id="menuList">
+                                <li><a class="dropdown-item" id="menuDashboard" href="@Url.Action("Index","Dashboard")">Dashboard</a></li>
+                                <li>
+                                    <a class="dropdown-item" id="menuCreateAFE" href="@Url.Action("CreateAFE","AFE")">
+                                        Create AFE
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" id="menuApproveEditAFE" href="@Url.Action("ApproveEditAFE","AFE")">
+                                        Approve/Edit AFE
+                                    </a>
+                                </li>
+                                @*@if (HttpContext.Current.Session["RoleId"] != null && Convert.ToInt32(HttpContext.Current.Session["RoleId"]) == 1)
+                                    {
+                                        <li><a class="dropdown-item" id="menuUserMaster" href="@Url.Action("Index", "UserMaster")">User Master</a></li>
+                                        <li>
+                                            <a class="dropdown-item" id="menuUserDefinition" href="@Url.Action("Index", "UserDefinition")">
+                                                Approver Permissions
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="menuAdmin" href="@Url.Action("Index", "Admin")">
+                                                Admin
+                                            </a>
+                                        </li>
+                                    }*@
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavSelectedProfAction" aria-controls="navbarNavSelectedProfAction" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse dropstart navbar-collapse" id="navbarNavSelectedProfAction">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="textMenu" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Profile
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" id="profMenuList">
+                                <li><a class="dropdown-item" href="@Url.Action("Index","ResetPassword")" id="resetPass">Reset Password</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Signout","Login")" id="signOut">Sign out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

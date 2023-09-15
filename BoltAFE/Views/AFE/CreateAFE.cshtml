@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "CreateAFE";
+    var versionUpdate = System.Configuration.ConfigurationManager.AppSettings["versionKey"];
+}
+<link href="~/Content/Css/CreateAFE.css" rel="stylesheet" />
+
+
+
+<div class="row" id="divCreateAFE">
+    <div class="col-md-12">
+        <div class="border border-color mt-2 min-vh-90">
+            <div class="row">
+                <input type="hidden" value="0" id="afeHDRID" />
+                <div class="col-md-6  table-responsive tableFixHead">
+                    <table class="table  " id="tblAFEDtl">
+                        <thead style="background-color: #4472c4; color: white; ">
+                        </thead>
+                        <tbody>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    AFE Name:
+                                </td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    AFE Type:
+                                </td>
+                                <td><select id="afeTypeSelect" class="form-select"></select></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    AFE Category:
+                                </td>
+                                <td><select id="afeCatSelect" class="form-select"></select></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    AFE #:
+                                </td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    Date:
+                                </td>
+                                <td><input type="date" class="form-control" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    Description:                                    :
+                                </td>
+                                <td><textarea class="form-control"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table  " id="tblDocDtl">
+                        <thead style="background-color: #4472c4; color: white; ">
+                            <tr>
+                                <th>
+                                    Document Name
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-3 table-responsive tableFixHead">
+                    <table class="table  " id="tblAFEDtlTwo">
+                        <thead style="background-color: #4472c4; color: white; ">
+                            <tr>
+                                <th scope="col">Metric</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    Gross AFE (M$)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    WI (%)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    NRI (%)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    ROY (%)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td colspan="2" class="emptyTDHeight">
+                                </td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    Net AFE (M$)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td colspan="2" class="emptyTDHeight">
+                                </td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    Oil (gross MBBL)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    Gas (gross MMCF)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    NGL (gross (MBBL)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    BOE (gross MBBL)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td colspan="2" class="emptyTDHeight">
+                                </td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    Und. Payout (yrs)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    PV10 (M$)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    F&D ($/BOE)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="evenRowBgColor">
+                                <td>
+                                    ROR (%)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                            <tr class="oddRowBgColor">
+                                <td>
+                                    MROI (%)
+                                </td>
+                                <td><input type="text" class="form-control cls-textBoxWidth" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-3 table-responsive tableFixHead">
+                    <div id="tblAFECommDiv">
+                        <table class="table  " id="tblAFEComm">
+                            <thead style="background-color: #4472c4; color: white; ">
+                                <tr>
+                                    <th scope="col">From</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-primary me-2 mb-2 float-end" disabled id="btnSaveComment" onclick="saveComment()">Save Comment</button>
+                    </div>
+                    <br />
+                    <div id="tblPrevAppDiv" hidden>
+                        <table class="table  " id="tblPrevApp">
+                            <thead style="background-color: #4472c4; color: white; ">
+                                <tr>
+                                    <th scope="col">
+                                        Previous Approvers
+                                    </th>
+                                    <th scope="col">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-primary me-2 float-end" id="btnCancle">Approve</button>
+                        <button type="button" class="btn btn-primary me-2 float-end" id="btnCancle">Return To</button>
+                        <button type="button" class="btn btn-danger me-2 float-end" id="btnCancle">Cancle</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" id="createAFEBtn" hidden>
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-primary me-2 float-end" id="btnSave">Save</button>
+                    <button type="button" class="btn btn-danger me-2 float-end" id="btnCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Users Start*@
+<div class="modal fade" id="usersModel" tabindex="-1" aria-labelledby="usersLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="usersLabel">Save/Submit</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="usersModelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSubmitTo">Submit To</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Users End*@
+
+@*File Modal Start*@
+<div class="modal fade" id="importFile" tabindex="-1" aria-labelledby="importFileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="importFileLabel">Upload File</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="importModelBody">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td> <label class="form-label">File: </label></td>
+                            <td> <input type="file" id="file" class="form-control" accept=".pdf,.doc,.docx,.xlsx,.xls,.csv,.jpeg,.jpg,.png"></td>
+                        </tr>
+                        <tr>
+                            <td> <label class="form-label">Description: </label></td>
+                            <td> <textarea class="form-control" id="docDescription"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveDocument()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*File Model End*@
+
+@section scripts {
+    <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>
+    <script src="~/Scripts/AppJs/AFE/CreateAFE.js?v=@versionUpdate"></script>
+}

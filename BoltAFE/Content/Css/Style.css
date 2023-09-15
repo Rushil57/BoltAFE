@@ -1,0 +1,81 @@
+﻿
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    left: 0px;
+    opacity: 1;
+    backdrop-filter: blur(4px)
+}
+
+.loader {
+    top: 40%
+}
+
+
+th, td, label {
+    font-size: small;
+}
+
+td, th {
+    padding: 0.1rem 0.1rem !important;
+    border-right: 1px solid #80808042;
+    padding-left: 5px !important;
+}
+
+.ml-5 {
+    margin-left: 5rem !important;
+}
+
+.plusBackColor {
+    background-color: #fbcaca !important;
+}
+
+.min-vh-60 {
+    min-height: 60vh !important;
+    height: 60vh !important;
+}
+
+.min-vh-80 {
+    min-height: 80vh !important;
+    height: 80vh !important;
+}
+
+.min-vh-90 {
+    min-height: 90vh !important;
+    height: 90vh !important;
+}
+
+.min-vh-70 {
+    min-height: 70vh !important;
+    height: 70vh !important;
+}
+
+.min-vh-75 {
+    min-height: 75vh !important;
+    height: 75vh !important;
+}
+
+.oddRowBgColor {
+    background-color: #EDEDED;
+}
+
+.evenRowBgColor {
+    background-color: #FFFFFF;
+}
+
+
+.commentOddBgColor {
+    background-color: #E9EBF5;
+}
+
+.commentEvenBgColor {
+    background-color: #CFD5EA;
+}
+
+.table-borderless > :not(caption) > * > * {
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+}

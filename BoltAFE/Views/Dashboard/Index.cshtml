@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    var versionUpdate = System.Configuration.ConfigurationManager.AppSettings["versionKey"];
+}
+<link href="~/Content/Css/Dashboard.css" rel="stylesheet" />
+
+<button onclick="window.location = '/AFE/CreateAFE'" class="btn buttonStyle" style="background-color: #BDD7EE">
+    Create AFE
+</button>
+<button onclick="window.location = '/AFE/ApproveEditAFE'" class="btn buttonStyle" style="background-color: #B4C7E7">
+    Approve/Edit AFE
+</button>
+<button onclick="renderReports(3)" class="btn buttonStyle" style="background-color: #8FAADC">
+    Search AFE
+</button>
+
+@section scripts {
+    <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>
+    <script src="~/Scripts/AppJs/Dashboard/Dashboard.js?v=@versionUpdate"></script>
+}

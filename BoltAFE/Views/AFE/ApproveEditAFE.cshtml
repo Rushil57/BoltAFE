@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "ApproveEditAFE";
+    var versionUpdate = System.Configuration.ConfigurationManager.AppSettings["versionKey"];
+}
+<link href="~/Content/Css/ApproveEditAFE.css" rel="stylesheet" />
+<div class="row" id="divCreateAFE">
+    <div class="col-md-12">
+        <div class="border border-color mt-2 min-vh-90">
+            <div class="row">
+                <div class="col-md-12  table-responsive tableFixHead">
+                    <table class="table  " id="tblAFEDtl">
+                        <thead style="background-color: #4472c4; color: white; ">
+                            <tr>
+                                <th>
+                                    Created Date
+                                </th>
+                                <th>
+                                    Created By
+                                </th>
+                                <th>AFE Name</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>
+                                    Gross Amount
+                                </th>
+                                <th>Net Amount</th>
+                                <th>PV10</th>
+                                <th>ROR</th>
+                                <th>
+                                    User Inbox
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>
+    <script src="~/Scripts/AppJs/AFE/ApproveEditAFE.js?v=@versionUpdate"></script>
+    <link rel="stylesheet" href="~/Scripts/Datatable/Datatable.css" />
+    <script src="~/Scripts/Datatable/Datatable.js"></script>
+}
