@@ -46,7 +46,7 @@ namespace BoltAFE.Repositories.AFE
         {
             try
             {
-                string query = $"SELECT * FROM [Afe_comments] where Afe_hdr_id = {afeHDRID} and User_id = {userID}   order by Timestamp desc";
+                string query = $"SELECT * FROM [Afe_comments]  ac left join UserDetail ud on ac.User_id = ud.User_ID where Afe_hdr_id = {afeHDRID}  order by Timestamp desc";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
