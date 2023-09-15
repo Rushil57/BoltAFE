@@ -22,10 +22,48 @@ $(document).ready(function () {
         $('#createAFEBtn').prop('hidden', false)
     }
     else {
+        getComments();
+        GetAFE();
         $('#tblPrevAppDiv').prop('hidden', false)
     }
 });
 
+
+function GetAFE() {
+    $.ajax({
+        beforeSend: function () {
+            AddLoader();
+        },
+        complete: function () {
+            setTimeout(function () {
+                RemoveLoader();
+            }, 500);
+        },
+        url: '/AFE/GetAFE',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'GET',
+        async: false,
+        data: { 'afeHDRID': Number(afeHDRIDEle.val()) },
+        success: function (data) {
+            if (!data.IsValid) {
+                return;
+            }
+            let afeHDR = JSON.parse(data.AFEHdr);
+            if (afeHDR.length == 1) {
+                $('#lblAfeName').text(afeHDR[0].Afe_name);
+                $('#lblAfeType').text(afeHDR[0].Type);
+                $('#lblAfeCategory').text(afeHDR[0].Category);
+                $('#lblAfeNum').text(afeHDR[0].Afe_num);
+                $('#lblAfeDate').text(afeHDR[0].Created_date);
+                $('#lblAfeDesc').text(afeHDR[0].Description);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
 function GetUsers() {
     $.ajax({
         beforeSend: function () {
@@ -48,11 +86,11 @@ function GetUsers() {
             }
             users = JSON.parse(data.users);
             users = users.filter(x => x.User_email != userEmail)
-            var usersListBoxStr = '<select class="form-select cls-listBox" name="users" size="' + users.length +'">'
+            var usersListBoxStr = '<select class="form-select cls-listBox" name="users" size="' + users.length + '">'
             for (var i = 0; i < users.length; i++) {
                 let userID = users[i].User_ID;
                 let userEmail = users[i].User_email;
-                usersListBoxStr += ' <option value="' + userID + '">' + userEmail +'</option>'
+                usersListBoxStr += ' <option value="' + userID + '">' + userEmail + '</option>'
             }
             usersListBoxStr += '</select>';
             usersModelBodyEle.html('');
@@ -133,16 +171,46 @@ function bindAFEDoc() {
         let colorClass = i % 2 == 0 ? 'evenRowBgColor' : 'oddRowBgColor';
         let currDocPath = isNullEmpty(docArr[i].Doc_path) ? "" : docArr[i].Doc_path;
         let currDescription = isNullEmpty(docArr[i].Doc_description) ? "" : docArr[i].Doc_description;
-        let currDocID = docArr[i].Afe_doc_id ;
-
+        let userID = docArr[i].User_id;
+        let currDocID = Number(userIDEle.val()) == userID ? docArr[i].Afe_doc_id : 0;
+        let currentTrashIcon = Number(userIDEle.val()) == userID ? trashIcon : '';
         if (currDocPath != "") {
-            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td>' + eyeIcon + '</td><td>' + trashIcon + '</td></tr>';
+            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td>' + eyeIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
         }
     }
     let colorClass = tblDocDtlBodyEle.length % 2 == 0 ? 'evenRowBgColor' : 'oddRowBgColor';
     tblDocDtlBodyStr += '<tr style ="cursor: pointer"  onclick="openFilePopup()" id="trPlusRowDoc" class="' + colorClass + '"><td colspan="4">' + plusIcon + '</td></tr>';
     tblDocDtlBodyEle.html('');
     tblDocDtlBodyEle.html(tblDocDtlBodyStr);
+}
+function deleteDoc(docID) {
+    if (docID > 0 && confirm('Are you sure do you want to delete this record?')) {
+        $.ajax({
+            beforeSend: function () {
+                AddLoader();
+            },
+            complete: function () {
+                setTimeout(function () {
+                    RemoveLoader();
+                }, 500);
+            },
+            url: '/AFE/DeleteDocument',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'GET',
+            async: false,
+            data: { 'afeHDRID': afeHDRIDEle.val(), docID: docID },
+            success: function (data) {
+                if (!data.IsValid) {
+                    return;
+                }
+                getDocuments();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
 }
 function addRowIntoCommentTbl(element) {
     btnSaveCommentEle.prop('disabled', false);
@@ -165,7 +233,7 @@ function getDocuments() {
         dataType: 'json',
         type: 'GET',
         async: false,
-        data: { 'afeHDRID': 0 },
+        data: { 'afeHDRID': afeHDRIDEle.val() },
         success: function (data) {
             if (!data.IsValid) {
                 return;
@@ -187,7 +255,7 @@ function saveDocument() {
     }
     var formData = new FormData();
     formData.append("file", files[0]);
-    formData.append("afeHDRID", 0);
+    formData.append("afeHDRID", afeHDRIDEle.val());
     formData.append("docDiscription", docDescriptionEle.val());
     $.ajax({
         before: AddLoader(),
@@ -220,7 +288,7 @@ function saveComment() {
     if (textareas.length > 0) {
         var lastTestArea = textareas[textareas.length - 1];
         var lastTestAreaComm = $(lastTestArea).val();
-        let afeHDRID = 0;
+        let afeHDRID = afeHDRIDEle.val();
         if (isNullEmpty(lastTestAreaComm)) {
             alert('Please enter comment.');
             return;
@@ -252,6 +320,35 @@ function saveComment() {
         }
 
     }
+}
+
+function getComments() {
+    $.ajax({
+        beforeSend: function () {
+            AddLoader();
+        },
+        complete: function () {
+            setTimeout(function () {
+                RemoveLoader();
+            }, 500);
+        },
+        url: '/AFE/GetComments',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'GET',
+        async: false,
+        data: { 'afeHDRID': afeHDRIDEle.val() },
+        success: function (data) {
+            if (!data.IsValid) {
+                return;
+            }
+            commentArr = JSON.parse(data.comments)
+            bindAFEComment();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 }
 btnSaveEle.click(function () {
     openModel('usersModel');

@@ -3,10 +3,8 @@ using BoltAFE.Helpers;
 using Dapper;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
 
 namespace BoltAFE.Repositories.AFE
 {
@@ -43,6 +41,21 @@ namespace BoltAFE.Repositories.AFE
         }
 
         #region Comment
+
+        public string GetComments(int afeHDRID, int userID)
+        {
+            try
+            {
+                string query = $"SELECT * FROM [Afe_comments] where Afe_hdr_id = {afeHDRID} and User_id = {userID}   order by Timestamp desc";
+                DataTable dt = CommonDatabaseOperationHelper.Get(query);
+                return JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" InsertComment=>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
         public bool InsertComment(int afeHDRID, string message, int userID)
         {
             try
@@ -86,7 +99,7 @@ namespace BoltAFE.Repositories.AFE
             try
             {
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
-                string query = $"SELECT * FROM [Afe_docs] where Afe_hdr_id = {afeHDRID} and User_id = {userID} order by Doc_order ";
+                string query = $"SELECT * FROM [Afe_docs] where Afe_hdr_id = {afeHDRID} order by Doc_order ";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -94,6 +107,20 @@ namespace BoltAFE.Repositories.AFE
             {
                 CommonDatabaseOperationHelper.Log("GetDocs =>", ex.Message + "==>" + ex.StackTrace, true);
                 throw;
+            }
+        }
+        public bool DeleteDoc(int afeHDRID, int docID)
+        {
+            try
+            {
+                string query = $"DELETE FROM [Afe_docs] where Afe_hdr_id = {afeHDRID}  and Afe_doc_id = {docID}";
+                int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" InsertComment=>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
             }
         }
 
@@ -116,6 +143,22 @@ namespace BoltAFE.Repositories.AFE
                 throw;
             }
         }
+
+        public string GetAFE(int afeHDRID)
+        {
+            try
+            {
+                string query = $"SELECT * FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where ah.Afe_hdr_id = {afeHDRID}";
+                DataTable dt = CommonDatabaseOperationHelper.Get(query);
+                return JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetAFE =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
+
         #endregion
     }
 }

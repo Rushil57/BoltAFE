@@ -3,9 +3,6 @@ using BoltAFE.Domain.UserMaster;
 using BoltAFE.Helpers;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,8 +20,9 @@ namespace BoltAFE.Controllers
         }
 
         #region Views 
-        public ActionResult CreateAFE()
+        public ActionResult CreateAFE(int afeHDR=0)
         {
+            ViewBag.AfeHDRID = afeHDR;
             return View();
         }
 
@@ -65,7 +63,28 @@ namespace BoltAFE.Controllers
 
         #endregion
 
-        #region Save Comment
+        #region  Comments
+
+        public string GetComments(int afeHDRID = 0)
+        {
+            bool isValid = false;
+            string comments = string.Empty;
+            try
+            {
+                var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
+                if (userID > 0)
+                {
+                    comments = _aFERepository.GetComments(afeHDRID,userID);
+                    isValid = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetComments =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, comments = comments });
+        }
+
         [HttpPost]
         public string SaveComment(int afeHDRID, string message)
         {
@@ -162,6 +181,23 @@ namespace BoltAFE.Controllers
             return JsonConvert.SerializeObject(new { IsValid = false, docs = docs });
         }
 
+        public string DeleteDocument(int afeHDRID , int docID)
+        {
+            bool isValid = false;
+            string data = string.Empty;
+            try
+            {
+                var isDeleted = _aFERepository.DeleteDoc(afeHDRID, docID);
+                data = "Document deleted successfully.";
+                isValid = true;
+            }
+            catch (Exception ex)
+            {
+                data = "Issue occured when try to delete this doc.";
+                CommonDatabaseOperationHelper.Log("DeleteDocument =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, docs = data });
+        }
         #endregion
 
         #region AFE List 
@@ -187,6 +223,29 @@ namespace BoltAFE.Controllers
                 AFEHdr = AFEHdr
             });
         }
+        public string GetAFE(int afeHDRID)
+        {
+            string AFEHdr = string.Empty;
+            try
+            {
+                AFEHdr = _aFERepository.GetAFE(afeHDRID);
+                return JsonConvert.SerializeObject(new
+                {
+                    IsValid = true,
+                    AFEHdr = AFEHdr
+                });
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetAFE =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new
+            {
+                IsValid = false,
+                AFEHdr = AFEHdr
+            });
+        }
+        
         #endregion
     }
 }

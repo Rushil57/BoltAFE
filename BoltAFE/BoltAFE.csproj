@@ -181,6 +181,7 @@
     <Content Include="Content\Css\LoginIndex.css" />
     <Content Include="Content\Css\ResetPassword.css" />
     <Content Include="Content\Css\Style.css" />
+    <Content Include="DBScript\BoltAFE.sql" />
     <Content Include="Docs\BOLTAFE.accdb" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -233,7 +234,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
-    <Folder Include="DBScript\" />
     <Folder Include="Files\" />
   </ItemGroup>
   <ItemGroup>

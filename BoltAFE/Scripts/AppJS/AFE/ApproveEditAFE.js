@@ -47,7 +47,7 @@ function GetAllAFE() {
                 let afeUserInbox = isNullEmptyValue(afeHdrs[i].Inbox_user_id);
                 let currentTrashIcon = Number(userIDEle.val()) == cretaedBy ? trashIcon : '';
 
-                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td>' + pencilIcon + '</td><td>' + currentTrashIcon + '</td></tr>';
+                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID +'\'">' + pencilIcon + '</td><td>' + currentTrashIcon + '</td></tr>';
             }
             tblAFEDtlBodyEle.html('');
             tblAFEDtlBodyEle.html(afeHdrsStr);

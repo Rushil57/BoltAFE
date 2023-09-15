@@ -10,48 +10,92 @@
     <div class="col-md-12">
         <div class="border border-color mt-2 min-vh-90">
             <div class="row">
-                <input type="hidden" value="0" id="afeHDRID" />
+                <input type="hidden" value="@ViewBag.AfeHDRID" id="afeHDRID" />
                 <div class="col-md-6  table-responsive tableFixHead">
                     <table class="table  " id="tblAFEDtl">
                         <thead style="background-color: #4472c4; color: white; ">
                         </thead>
                         <tbody>
-                            <tr class="oddRowBgColor">
-                                <td>
-                                    AFE Name:
-                                </td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
-                            <tr class="evenRowBgColor">
-                                <td>
-                                    AFE Type:
-                                </td>
-                                <td><select id="afeTypeSelect" class="form-select"></select></td>
-                            </tr>
-                            <tr class="oddRowBgColor">
-                                <td>
-                                    AFE Category:
-                                </td>
-                                <td><select id="afeCatSelect" class="form-select"></select></td>
-                            </tr>
-                            <tr class="evenRowBgColor">
-                                <td>
-                                    AFE #:
-                                </td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
-                            <tr class="oddRowBgColor">
-                                <td>
-                                    Date:
-                                </td>
-                                <td><input type="date" class="form-control" /></td>
-                            </tr>
-                            <tr class="evenRowBgColor">
-                                <td>
-                                    Description:                                    :
-                                </td>
-                                <td><textarea class="form-control"></textarea></td>
-                            </tr>
+                            @{
+                                if (ViewBag.AfeHDRID == 0)
+                                {
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            AFE Name:
+                                        </td>
+                                        <td><input type="text" class="form-control" /></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            AFE Type:
+                                        </td>
+                                        <td><select id="afeTypeSelect" class="form-select"></select></td>
+                                    </tr>
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            AFE Category:
+                                        </td>
+                                        <td><select id="afeCatSelect" class="form-select"></select></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            AFE #:
+                                        </td>
+                                        <td><input type="text" class="form-control" /></td>
+                                    </tr>
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            Date:
+                                        </td>
+                                        <td><input type="date" class="form-control" /></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            Description:                                    :
+                                        </td>
+                                        <td><textarea class="form-control"></textarea></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            AFE Name:
+                                        </td>
+                                        <td><label id="lblAfeName"></label></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            AFE Type:
+                                        </td>
+                                        <td><label id="lblAfeType"></label></td>
+                                    </tr>
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            AFE Category:
+                                        </td>
+                                        <td><label id="lblAfeCategory"></label></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            AFE #:
+                                        </td>
+                                        <td><label id="lblAfeNum"></label></td>
+                                    </tr>
+                                    <tr class="oddRowBgColor">
+                                        <td>
+                                            Date:
+                                        </td>
+                                        <td><label id="lblAfeDate"></label></td>
+                                    </tr>
+                                    <tr class="evenRowBgColor">
+                                        <td>
+                                            Description:                                    :
+                                        </td>
+                                        <td><label id="lblAfeDesc"></label></td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                     <table class="table  " id="tblDocDtl">
@@ -185,7 +229,6 @@
                             <thead style="background-color: #4472c4; color: white; ">
                                 <tr>
                                     <th scope="col">From</th>
-                                    @*test*@
                                 </tr>
                             </thead>
                             <tbody>
