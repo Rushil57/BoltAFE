@@ -32,6 +32,13 @@ function isNullEmptyValue(value) {
     return value;
 }
 
+function isNullEmptyDecValue(value) {
+    if (typeof value === "undefined" || value === null || value == "") {
+        return 0.0;
+    }
+    return value;
+}
+
 function getFormattedDate(dString) {
     if (dString == null) {
         return '';

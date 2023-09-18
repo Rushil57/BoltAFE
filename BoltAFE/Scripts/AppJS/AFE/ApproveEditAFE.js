@@ -47,7 +47,7 @@ function GetAllAFE() {
                 let afeUserInbox = isNullEmptyValue(afeHdrs[i].Inbox_user_id);
                 let currentTrashIcon = Number(userIDEle.val()) == cretaedBy ? trashIcon : '';
 
-                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID +'\'">' + pencilIcon + '</td><td>' + currentTrashIcon + '</td></tr>';
+                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID + '\'">' + pencilIcon + '</td><td onclick="deleteAfeHDR('+ afeHDRID +')">' + currentTrashIcon + '</td></tr>';
             }
             tblAFEDtlBodyEle.html('');
             tblAFEDtlBodyEle.html(afeHdrsStr);
@@ -59,7 +59,11 @@ function GetAllAFE() {
     });
 }
 
-
+function deleteAfeHDR(afeHDRID) {
+    if (afeHDRID > 0 && confirm('Are you sure do you want to delete this record?')) {
+        deleteCancelAFEHDR(afeHDRID, true)
+    }
+}
 function destroyDataTable() {
     if (table != '') {
         table.destroy();

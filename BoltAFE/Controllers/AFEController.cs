@@ -20,9 +20,10 @@ namespace BoltAFE.Controllers
         }
 
         #region Views 
-        public ActionResult CreateAFE(int afeHDR=0)
+        public ActionResult CreateAFE(int afeHDR=0,int afeDTLID = 0)
         {
             ViewBag.AfeHDRID = afeHDR;
+            ViewBag.AfeDTLID = afeDTLID;
             return View();
         }
 
@@ -245,7 +246,57 @@ namespace BoltAFE.Controllers
                 AFEHdr = AFEHdr
             });
         }
-        
+        [HttpPost]
+        public string DeleteAFEHDR(int afeHDRID)
+        {
+            bool isValid = false;
+            string data = string.Empty;
+            try
+            {
+                var isDeleted = _aFERepository.DeleteAFEHDR(afeHDRID);
+                data = "AFE deleted successfully.";
+                isValid = true;
+            }
+            catch (Exception ex)
+            {
+                data = "Issue occured when try to delete this header.";
+                CommonDatabaseOperationHelper.Log("DeleteAFEHDR =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, data = data });
+        }
         #endregion
+
+        #region Save AFE and DTL
+
+        public string SaveHDRAndDTL(string afeHDR , string afeHDRDTL)
+        {
+            bool isValid = false;
+            string data = "Issue occured when try to save AFE Header and Details.";
+            try
+            {
+                var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
+                if (userID > 0)
+                {
+                    var isDuplicateAFENum = _aFERepository.CheckIfDuplicateAFENum(afeHDR);
+                    if (!isDuplicateAFENum)
+                    {
+                        var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL);
+                        isValid = true;
+                        data = "AFE Header and Details saved successfully.";
+                    }
+                    else
+                    {
+                        data = "This AFE Number is duplicate please enter unique.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("SaveHDRAndDTL =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, data = data });
+        }
+        #endregion
+
     }
 }

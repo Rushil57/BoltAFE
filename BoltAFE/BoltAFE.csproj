@@ -151,6 +151,8 @@
     <Compile Include="Helpers\GlobalClass.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\SessionTimeoutAttribute.cs" />
+    <Compile Include="Models\AfeEconDTLModel.cs" />
+    <Compile Include="Models\AfeHDRModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Admin\AdminRepository.cs" />
@@ -184,9 +186,11 @@
     <Content Include="DBScript\BoltAFE.sql" />
     <Content Include="Docs\BOLTAFE.accdb" />
     <Content Include="favicon.ico" />
+    <Content Include="Files\Sample.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\AppJS\AFE\ApproveEditAFE.js" />
+    <Content Include="Scripts\AppJS\AFE\Common.js" />
     <Content Include="Scripts\AppJS\AFE\CreateAFE.js" />
     <Content Include="Scripts\AppJS\Common\Common.js" />
     <Content Include="Scripts\AppJS\Dashboard\Dashboard.js" />
@@ -234,7 +238,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
-    <Folder Include="Files\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

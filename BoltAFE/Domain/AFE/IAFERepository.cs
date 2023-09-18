@@ -11,5 +11,10 @@
         bool DeleteDoc(int afeHDRID, int docID);
         string GetAllAFE();
         string GetAFE(int afeHDRID);
+
+        bool DeleteAFEHDR(int afeHDRID);
+
+        bool CheckIfDuplicateAFENum(string afeHDR);
+        bool SaveHDRAndDTL(string afeHDR,string afeHDRDTL);
     }
 }

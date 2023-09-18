@@ -77,10 +77,10 @@ namespace BoltAFE.Helpers
         {
             try
             {
-                string subject = "Login Credentials for Bolt Expense  System";
+                string subject = "Login Credentials for Bolt AFE  System";
                 string bodyString = $@"<p>Hello {userName},<p>
                     <br>
-                    {(flag == true ? "<p>Welcome to Bolt Expense  System.<p>" : "<p>Your Password has been Reset.</p>")}
+                    {(flag == true ? "<p>Welcome to Bolt AFE  System.<p>" : "<p>Your Password has been Reset.</p>")}
                     
                     <p>Your Login Credentials are mentioned below.<p>
                    
@@ -88,8 +88,31 @@ namespace BoltAFE.Helpers
                     <p>Password: {Password}<p>
                     <br>
                     <p>Thanks & Regards,</p>
-                    <p>Bolt Expense </p>";
+                    <p>Bolt AFE </p>";
                 return adminRepository.SendEmail(bodyString, userName, subject);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static string SendEmailOfAFEApprrove(string receiverUserEmail, string senderUserEmail,string afeName, string afeNumber, IAdminRepository adminRepository)
+        {
+            try
+            {
+                string subject = "You have an new afe to approve";
+                string bodyString = $@"<p>Hello {receiverUserEmail},<p>
+                    <br>
+                    <p>You have new AFE received for approve or reject. which is created by {senderUserEmail}.
+                    <br/>
+                    <p><b>Afe Name: </b>{afeName}.</p>
+                    <p><b>Afe Number: </b>{afeNumber}.</p>
+                    Please review and reject or approve it.<p>
+                    <br>
+                    <p>Thanks & Regards,</p>
+                    <p>Bolt AFE </p>";
+                return adminRepository.SendEmail(bodyString, receiverUserEmail, subject);
             }
             catch (Exception ex)
             {

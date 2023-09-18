@@ -8,10 +8,33 @@ var btnSaveCommentEle = $('#btnSaveComment');
 var commentArr = [];
 var docArr = [];
 var btnSaveEle = $('#btnSave');
+var btnSubmitToEle = $('#btnSubmitTo');
+var btnSaveHDREle = $('#btnSaveHDR');
 var users = [];
 var usersModelBodyEle = $('#usersModelBody');
 var docDescriptionEle = $('#docDescription');
 var fileEle = $("#file");
+var btnCancelEle = $('#btnCancel');
+var txtAFENameEle = $('#txtAFEName');
+var txtAFENumEle = $('#txtAFENum');
+var txtAfeDateEle = $('#txtAfeDate');
+var txtAreaDescEle = $('#txtAreaDesc');
+
+var txtGrossAFEEle = $('#txtGrossAFE');
+var txtWIEle = $('#txtWI');
+var txtNRIEle = $('#txtNRI');
+var txtRoyEle = $('#txtRoy');
+var txtNetAFEEle = $('#txtNetAFE');
+var txtOilEle = $('#txtOil');
+var txtGasEle = $('#txtGas');
+var txtNGLEle = $('#txtNGL');
+var txtBOEEle = $('#txtBOE');
+var txtUPayoutEle = $('#txtUPayout');
+var txtPV10Ele = $('#txtPV10');
+var txtFDEle = $('#txtFD');
+var txtRorEle = $('#txtRor');
+var txtMroiEle = $('#txtMroi');
+var afeDTLIDEle = $('#afeDTLID');
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -56,7 +79,8 @@ function GetAFE() {
                 $('#lblAfeCategory').text(afeHDR[0].Category);
                 $('#lblAfeNum').text(afeHDR[0].Afe_num);
                 $('#lblAfeDate').text(afeHDR[0].Created_date);
-                $('#lblAfeDesc').text(afeHDR[0].Description);
+                txtAreaDescEle.text(afeHDR[0].Description);
+                afeDTLIDEle.val(afeHDR[0].Afe_econ_dtl_id);
             }
         },
         error: function (err) {
@@ -352,9 +376,133 @@ function getComments() {
 }
 btnSaveEle.click(function () {
     openModel('usersModel');
+    $('.cls-listBox').val(0);
 })
 
 function openFilePopup() {
     $('#file').val('');
+    docDescriptionEle.val('');
     openModel('importFile');
+}
+
+btnCancelEle.click(function () {
+    deleteCancelAFEHDR(0, false)
+})
+
+btnSaveHDREle.click(function () {
+    saveHDRAndDTL(false);
+})
+btnSubmitToEle.click(function () {
+    saveHDRAndDTL(true);
+})
+
+function saveHDRAndDTL(isSubmitTo) {
+    let isValidSave = true;
+    let isValidSubmitTo = true;
+    let isValidStr = 'Please enter or select ';
+    let isValidStrMessage = ' ';
+    let isValidSubmitToMessage = ' ';
+    let currAfeType = Number(afeTypeSelectEle.find(':selected').val());
+    let currCat = Number(afeCatSelectEle.find(':selected').val());
+    let currName = txtAFENameEle.val();
+    let currNum = txtAFENumEle.val();
+    let currDate = txtAfeDateEle.val();
+    let inboxUserID = Number($('.cls-listBox').val());
+    let currInboxUserID = isSubmitTo ? inboxUserID : userIDEle.val();
+    let currInboxUserEmail = isSubmitTo ? $('.cls-listBox').find(':selected').text() : userEmail;
+
+    if (currAfeType == 0) {
+        isValidSave = false;
+        isValidStrMessage += 'AFE Type';
+    }
+    if (currCat == 0) {
+        isValidSave = false;
+        isValidStrMessage += ' ,AFE Category';
+    }
+    if (isNullEmpty(currName)) {
+        isValidSave = false;
+        isValidStrMessage += ' ,AFE Name'
+    }
+    if (isNullEmpty(currNum)) {
+        isValidSave = false;
+        isValidStrMessage += ' ,AFE Number'
+    }
+    if (isNullEmpty(currDate)) {
+        isValidSave = false;
+        isValidStrMessage += ' ,AFE Date'
+    }
+    if (isSubmitTo && inboxUserID == 0) {
+        isValidSubmitTo = false;
+        isValidSubmitToMessage += 'If you need to submit your AFE to other user then Please select user.'
+    }
+    if (isValidSave && isValidSubmitTo) {
+
+        let afeHDR = {
+            Afe_hdr_id: Number(afeHDRIDEle.val()),
+            Afe_name: currName,
+            Afe_type_id: currAfeType,
+            Afe_category_id: currCat,
+            Afe_num: currNum,
+            Created_date: currDate,
+            Inbox_user_id: currInboxUserID,
+            Inbox_user_email: currInboxUserEmail
+        }
+
+        let afeHDRDTL = {
+            Afe_econ_dtl_id: Number(afeDTLIDEle.val()),
+            Afe_hdr_id: Number(afeHDRIDEle.val()),
+            Description: txtAreaDescEle.val(),
+            Gross_afe: isNullEmptyDecValue(txtGrossAFEEle.val()),
+            Wi: isNullEmptyDecValue(txtWIEle.val()),
+            Nri: isNullEmptyDecValue(txtNRIEle.val()),
+            Roy: isNullEmptyDecValue(txtRoyEle.val()),
+            Net_afe: isNullEmptyDecValue(txtNetAFEEle.val()),
+            Oil: isNullEmptyDecValue(txtOilEle.val()),
+            Gas: isNullEmptyDecValue(txtGasEle.val()),
+            Ngl: isNullEmptyDecValue(txtNGLEle.val()),
+            Boe: isNullEmptyDecValue(txtBOEEle.val()),
+            Und_po: isNullEmptyDecValue(txtUPayoutEle.val()),
+            Pv10: isNullEmptyDecValue(txtPV10Ele.val()),
+            F_and_d: isNullEmptyDecValue(txtFDEle.val()),
+            Ror: isNullEmptyDecValue(txtRorEle.val()),
+            Mroi: isNullEmptyDecValue(txtMroiEle.val()),
+            Changed_date: new Date(),
+        }
+
+        $.ajax({
+            before: AddLoader(),
+            complete: function () {
+                setTimeout(function () {
+                    RemoveLoader();
+                }, 500);
+            },
+            type: "POST",
+            url: '/AFE/SaveHDRAndDTL',
+            data: JSON.stringify({ 'afeHDR': JSON.stringify(afeHDR), 'afeHDRDTL': JSON.stringify(afeHDRDTL) }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            cache: false,
+            success: function (data) {
+                alert(data.data);
+                if (data.IsValid) {
+                    window.location.href = '/Dashboard'
+                }
+            },
+            error: function (e1, e2, e3) {
+            }
+        });
+    }
+    else {
+        if (!isValidSave) {
+            firstCommaIndex = isValidStrMessage.indexOf(',') + 1
+            if (firstCommaIndex < 4) {
+                isValidStrMessage = isValidStrMessage.substring(firstCommaIndex, isValidStrMessage.length)
+            }
+            alert(isValidStr + isValidStrMessage);
+        }
+        if (!isValidSubmitTo) {
+            alert(isValidSubmitToMessage);
+        }
+    }
 }
