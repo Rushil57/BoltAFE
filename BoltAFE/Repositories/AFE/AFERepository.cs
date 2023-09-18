@@ -6,6 +6,7 @@ using Dapper;
 using Newtonsoft.Json;
 using System;
 using System.Data;
+using System.IO;
 using System.Linq;
 
 namespace BoltAFE.Repositories.AFE
@@ -180,10 +181,24 @@ namespace BoltAFE.Repositories.AFE
 
         public bool DeleteAFEHDR(int afeHDRID)
         {
+            var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
+            string query = string.Empty;
             try
             {
+                string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
-                string query = $"begin transaction; DELETE FROM [Afe_econ_dtl] where [Afe_hdr_id] = {afeHDRID}; DELETE FROM [Afe_docs] where [Afe_hdr_id] = {afeHDRID}  and [User_id] = {userID} ; DELETE FROM [Afe_comments] where [Afe_hdr_id] = {afeHDRID}  and [User_id] = {userID} ; DELETE FROM [Afe_aprvl_hist_dtl] where [Afe_hdr_id] = {afeHDRID} ;  DELETE FROM [Afe_hdr] where [Afe_hdr_id] = {afeHDRID}  and Created_By = {userID} commit transaction;";
+
+                query = $"Select Doc_path FROM [Afe_docs] where [Afe_hdr_id] = {afeHDRID} and [User_id] = {userID}";
+                var allFilesPath = connection.Query<string>(query).ToList();
+                foreach (var filePath in allFilesPath)
+                {
+                    string docFullPath = path + filePath.ToString().Substring(2).Replace('/', '\\');
+                    if (File.Exists(docFullPath))
+                    {
+                        File.Delete(docFullPath);
+                    }
+                }
+                query = $"begin transaction; DELETE FROM [Afe_econ_dtl] where [Afe_hdr_id] = {afeHDRID}; DELETE FROM [Afe_docs] where [Afe_hdr_id] = {afeHDRID}  and [User_id] = {userID} ; DELETE FROM [Afe_comments] where [Afe_hdr_id] = {afeHDRID}  and [User_id] = {userID} ; DELETE FROM [Afe_aprvl_hist_dtl] where [Afe_hdr_id] = {afeHDRID} ;  DELETE FROM [Afe_hdr] where [Afe_hdr_id] = {afeHDRID}  and Created_By = {userID} commit transaction;";
                 int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
                 return true;
             }
@@ -192,6 +207,7 @@ namespace BoltAFE.Repositories.AFE
                 CommonDatabaseOperationHelper.Log(" DeleteAFEHDR =>", ex.Message + "==>" + ex.StackTrace, true);
                 return false;
             }
+            finally { connection.Close(); }
         }
 
         #endregion
