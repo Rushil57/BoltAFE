@@ -101,7 +101,7 @@ namespace BoltAFE.Helpers
         {
             try
             {
-                string subject = "You have an new afe to approve";
+                string subject = "You have an new AFE to approve";
                 string bodyString = $@"<p>Hello {receiverUserEmail},<p>
                     <br>
                     <p>You have new AFE received for approve or reject. which is created by {senderUserEmail}.
@@ -120,67 +120,26 @@ namespace BoltAFE.Helpers
             }
         }
 
-        //public static string SendEmailOfSubmitExpense(string receiverMail, string senderUserName, string expenseHDRName, IAdminRepository adminRepository)
-        //{
-        //    try
-        //    {
-        //        string subject = $"New report {expenseHDRName} submitted by {senderUserName} for approval.";
-        //        string bodyString = $@"<p>Hi {receiverMail},</p>
-        //            <br>
-        //            <p>I am submitted my expenses claim.</p>
-        //            <p> I've attached all the appropriate documents and receipts for you to process my claim.</p>
-        //            <p> Please review my expense claim and let me know if you require additional information to ensure it is paid.</p>
-        //            <br>
-        //            <p>Thanks & Regards,</p>
-        //            <p> {senderUserName}</p>
-        //            <p>Bolt Expense </p>";
-        //        return adminRepository.SendEmail(bodyString, receiverMail, subject);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        //public static string SendEmailOfApproveExpense(string receiverMail, string senderUserName, string expenseHDRName, IAdminRepository adminRepository)
-        //{
-        //    try
-        //    {
-        //        string subject = $"Your report {expenseHDRName} approved by {senderUserName}.";
-        //        string bodyString = $@"<p>Hi {receiverMail},</p>
-        //            <br>
-        //            <p>I am approved your claim.Your claim amount will be credit with in 24 hrs.</p>
-        //            <p>If not received after 24 hrs. then let me know about it.</p>
-        //            <br>
-        //            <p>Thanks & Regards,</p>
-        //            <p> {senderUserName}</p>
-        //            <p>Bolt Expense </p>";
-        //        return adminRepository.SendEmail(bodyString, receiverMail, subject);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        //public static string SendEmailOfRejectExpense(string receiverMail, string senderUserName, string expenseHDRName, IAdminRepository adminRepository)
-        //{
-        //    try
-        //    {
-        //        string subject = $"Your report {expenseHDRName} rejected by {senderUserName}.";
-        //        string bodyString = $@"<p>Hi {receiverMail},</p>
-        //            <br>
-        //            <p>I am rejecting your claim.Please provide more details about it.</p>
-        //            <br>
-        //            <p>Thanks & Regards,</p>
-        //            <p> {senderUserName}</p>
-        //            <p>Bolt Expense </p>";
-        //        return adminRepository.SendEmail(bodyString, receiverMail, subject);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        public static string SendEmailOfAFEApprroved(string receiverUserEmail, string senderUserEmail, string afeName, string afeNumber, IAdminRepository adminRepository)
+        {
+            try
+            {
+                string subject = $"{afeName} AFE approved";
+                string bodyString = $@"<p>Hello {receiverUserEmail},<p>
+                    <br>
+                    <p><b>Afe Name: </b>{afeName}.</p>
+                    <p><b>Afe Number: </b>{afeNumber}.</p>
+                    This AFE is approved by {senderUserEmail}.<p>
+                    <br>
+                    <p>Thanks & Regards,</p>
+                    <p>Bolt AFE </p>";
+                return adminRepository.SendEmail(bodyString, receiverUserEmail, subject);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+      
     }
 }

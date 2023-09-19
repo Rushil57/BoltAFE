@@ -31,8 +31,13 @@ function GetAllAFE() {
             destroyDataTable();
             afeHdrs = JSON.parse(data.AFEHdr);
             afeHdrsStr = '';
+            let afeHDRIDArr = [];
             for (var i = 0; i < afeHdrs.length; i++) {
                 let afeHDRID = afeHdrs[i].Afe_hdr_id;
+                if ($.inArray(afeHDRID, afeHDRIDArr) !== -1) {
+                    continue;
+                }
+                afeHDRIDArr.push(afeHDRID);
                 let createdDate = toISOStringLocal(new Date(isNullEmptyValue(afeHdrs[i].Created_date)));
                 let cretaedByEmail = isNullEmptyValue(afeHdrs[i].User_email);
                 let cretaedBy = isNullEmptyValue(afeHdrs[i].Created_By);

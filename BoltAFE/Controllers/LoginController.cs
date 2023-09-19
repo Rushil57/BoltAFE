@@ -38,6 +38,7 @@ namespace BoltAFE.Controllers
                     session["RoleId"] = 1;
                     session["ResetPassword"] = result[0].ResetPassword;
                     session["Password"] = result[0].Password;
+                    session["Approver_amount"] = result[0].Approver_amount;
                     return JsonConvert.SerializeObject(new { IsValid = true, Data = result[0] });
                 }
                 else

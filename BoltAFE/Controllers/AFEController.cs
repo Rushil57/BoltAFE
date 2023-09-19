@@ -272,19 +272,20 @@ namespace BoltAFE.Controllers
 
         #region Save AFE and DTL
 
-        public string SaveHDRAndDTL(string afeHDR , string afeHDRDTL)
+        public string SaveHDRAndDTL(string afeHDR , string afeHDRDTL,bool isApproveAFE)
         {
             bool isValid = false;
+            bool isDuplicateAFENum = false;
             string data = "Issue occured when try to save AFE Header and Details.";
             try
             {
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
                 if (userID > 0)
                 {
-                    var isDuplicateAFENum = _aFERepository.CheckIfDuplicateAFENum(afeHDR);
+                    isDuplicateAFENum = isApproveAFE ? isDuplicateAFENum : _aFERepository.CheckIfDuplicateAFENum(afeHDR);
                     if (!isDuplicateAFENum)
                     {
-                        var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL);
+                        var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL, isApproveAFE);
                         isValid = true;
                         data = "AFE Header and Details saved successfully.";
                     }
@@ -300,6 +301,28 @@ namespace BoltAFE.Controllers
             }
             return JsonConvert.SerializeObject(new { IsValid = isValid, data = data });
         }
+        #endregion
+
+        #region Approve AFE
+
+        public string ApproveAFE(int afeHDRID)
+        {
+            bool isValid = false;
+            string data = string.Empty;
+            try
+            {
+                var isApproved = _aFERepository.ApproveAFE(afeHDRID);
+                data = "AFE approved successfully.";
+                isValid = isApproved;
+            }
+            catch (Exception ex)
+            {
+                data = "Issue occured when try to approve AFE.";
+                CommonDatabaseOperationHelper.Log("ApproveAFE =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, data = data });
+        }
+
         #endregion
 
     }

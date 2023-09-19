@@ -35,8 +35,14 @@ var txtFDEle = $('#txtFD');
 var txtRorEle = $('#txtRor');
 var txtMroiEle = $('#txtMroi');
 var afeDTLIDEle = $('#afeDTLID');
-
+var btnApproveEle = $('#btnApprove');
 var tblPrevAppBodyEle = $('#tblPrevApp >  tbody');
+
+var approverAmountEle = $('#approverAmount');
+var isApproveAFE = false;
+var isApprovedAFE = false;
+var lblAfeNameEle = $('#lblAfeName');
+var lblAfeNumEle = $('#lblAfeNum')
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -76,11 +82,12 @@ function GetAFE() {
             }
             let afeHDR = JSON.parse(data.AFEHdr);
             let afeHdrAprvlHistory = JSON.parse(data.AFEHdrAprvlHistory);
-            if (afeHDR.length == 1) {
-                $('#lblAfeName').text(afeHDR[0].Afe_name);
+            $('input').tooltip('dispose');
+            if (afeHDR.length > 0) {
+                lblAfeNameEle.text(afeHDR[0].Afe_name);
                 $('#lblAfeType').text(afeHDR[0].Type);
                 $('#lblAfeCategory').text(afeHDR[0].Category);
-                $('#lblAfeNum').text(afeHDR[0].Afe_num);
+                lblAfeNumEle.text(afeHDR[0].Afe_num);
                 $('#lblAfeDate').text(afeHDR[0].Created_date);
                 txtAreaDescEle.text(afeHDR[0].Description);
                 afeDTLIDEle.val(afeHDR[0].Afe_econ_dtl_id);
@@ -99,6 +106,30 @@ function GetAFE() {
                 txtRorEle.val(afeHDR[0].Ror);
                 txtMroiEle.val(afeHDR[0].Mroi);
             }
+            if (afeHDR.length > 1) {
+                txtAreaDescEle.attr('title', afeHDR[1].Description);
+                txtGrossAFEEle.attr('title', afeHDR[1].Gross_afe);
+                txtWIEle.attr('title', afeHDR[1].Wi);
+                txtNRIEle.attr('title', afeHDR[1].Nri);
+                txtRoyEle.attr('title', afeHDR[1].Roy);
+                txtNetAFEEle.attr('title', afeHDR[1].Net_afe);
+                txtOilEle.attr('title', afeHDR[1].Oil);
+                txtGasEle.attr('title', afeHDR[1].Gas);
+                txtNGLEle.attr('title', afeHDR[1].Ngl);
+                txtBOEEle.attr('title', afeHDR[1].Boe);
+                txtUPayoutEle.attr('title', afeHDR[1].Und_po);
+                txtPV10Ele.attr('title', afeHDR[1].Pv10);
+                txtFDEle.attr('title', afeHDR[1].F_and_d);
+                txtRorEle.attr('title', afeHDR[1].Ror);
+                txtMroiEle.attr('title', afeHDR[1].Mroi);
+            }
+
+            $("input").tooltip({
+                hide: {
+                    effect: "explode",
+                    delay: 250
+                }
+            });
             tblPrevAppBodyEle.html('');
             tblPrevAppBodyStr = '';
             for (var i = 0; i < afeHdrAprvlHistory.length; i++) {
@@ -106,7 +137,7 @@ function GetAFE() {
                 let currAprlUserID = afeHdrAprvlHistory[i].Approver_user_id;
                 let currPreviousAprlEmail = isNullEmptyValue(afeHdrAprvlHistory[i].User_email);
                 let currAprlDate = getFormattedDateTime(afeHdrAprvlHistory[i].Approved_date);
-                tblPrevAppBodyStr += '<tr><input type="hidden" class="aprlHistoryID" value="' + currAprlHistoryID + '"><input class="aprlUserID" type="hidden" value="' + currAprlUserID + '"><td>' + currPreviousAprlEmail + '</td><td>' + currAprlDate +'</td></tr>'
+                tblPrevAppBodyStr += '<tr><input type="hidden" class="aprlHistoryID" value="' + currAprlHistoryID + '"><input class="aprlUserID" type="hidden" value="' + currAprlUserID + '"><td>' + currPreviousAprlEmail + '</td><td>' + currAprlDate + '</td></tr>'
             }
             tblPrevAppBodyEle.html(tblPrevAppBodyStr);
         },
@@ -402,10 +433,13 @@ function getComments() {
     });
 }
 btnSaveEle.click(function () {
-    openModel('usersModel');
-    $('.cls-listBox').val(0);
+    openUserModel()
 })
 
+function openUserModel() {
+    openModel('usersModel');
+    $('.cls-listBox').val(0);
+}
 function openFilePopup() {
     $('#file').val('');
     docDescriptionEle.val('');
@@ -424,112 +458,160 @@ btnSubmitToEle.click(function () {
 })
 
 function saveHDRAndDTL(isSubmitTo) {
-    let isValidSave = true;
-    let isValidSubmitTo = true;
-    let isValidStr = 'Please enter or select ';
-    let isValidStrMessage = ' ';
-    let isValidSubmitToMessage = ' ';
-    let currAfeType = Number(afeTypeSelectEle.find(':selected').val());
-    let currCat = Number(afeCatSelectEle.find(':selected').val());
-    let currName = txtAFENameEle.val();
-    let currNum = txtAFENumEle.val();
-    let currDate = txtAfeDateEle.val();
-    let inboxUserID = Number($('.cls-listBox').val());
-    let currInboxUserID = isSubmitTo ? inboxUserID : userIDEle.val();
-    let currInboxUserEmail = isSubmitTo ? $('.cls-listBox').find(':selected').text() : userEmail;
+    AddLoader();
+    setTimeout(function () {
+        let isValidSave = true;
+        let isValidSubmitTo = true;
+        let isValidStr = 'Please enter or select ';
+        let isValidStrMessage = ' ';
+        let isValidSubmitToMessage = ' ';
+        let currAfeType = !isApproveAFE ? Number(afeTypeSelectEle.find(':selected').val()) : 0;
+        let currCat = !isApproveAFE ? Number(afeCatSelectEle.find(':selected').val()) : 0;
+        let currName = !isApproveAFE ? txtAFENameEle.val() : lblAfeNameEle.text();
+        let currNum = !isApproveAFE ? txtAFENumEle.val() : lblAfeNumEle.text();
+        let currDate = txtAfeDateEle.val();
+        let inboxUserID = Number($('.cls-listBox').val());
+        let currInboxUserID = isSubmitTo ? inboxUserID : userIDEle.val();
+        let currInboxUserEmail = isSubmitTo ? $('.cls-listBox').find(':selected').text() : userEmail;
 
-    if (currAfeType == 0) {
-        isValidSave = false;
-        isValidStrMessage += 'AFE Type';
-    }
-    if (currCat == 0) {
-        isValidSave = false;
-        isValidStrMessage += ' ,AFE Category';
-    }
-    if (isNullEmpty(currName)) {
-        isValidSave = false;
-        isValidStrMessage += ' ,AFE Name'
-    }
-    if (isNullEmpty(currNum)) {
-        isValidSave = false;
-        isValidStrMessage += ' ,AFE Number'
-    }
-    if (isNullEmpty(currDate)) {
-        isValidSave = false;
-        isValidStrMessage += ' ,AFE Date'
-    }
-    if (isSubmitTo && inboxUserID == 0) {
-        isValidSubmitTo = false;
-        isValidSubmitToMessage += 'If you need to submit your AFE to other user then Please select user.'
-    }
-    if (isValidSave && isValidSubmitTo) {
-
-        let afeHDR = {
-            Afe_hdr_id: Number(afeHDRIDEle.val()),
-            Afe_name: currName,
-            Afe_type_id: currAfeType,
-            Afe_category_id: currCat,
-            Afe_num: currNum,
-            Created_date: currDate,
-            Inbox_user_id: currInboxUserID,
-            Inbox_user_email: currInboxUserEmail
-        }
-
-        let afeHDRDTL = {
-            Afe_econ_dtl_id: Number(afeDTLIDEle.val()),
-            Afe_hdr_id: Number(afeHDRIDEle.val()),
-            Description: txtAreaDescEle.val(),
-            Gross_afe: isNullEmptyDecValue(txtGrossAFEEle.val()),
-            Wi: isNullEmptyDecValue(txtWIEle.val()),
-            Nri: isNullEmptyDecValue(txtNRIEle.val()),
-            Roy: isNullEmptyDecValue(txtRoyEle.val()),
-            Net_afe: isNullEmptyDecValue(txtNetAFEEle.val()),
-            Oil: isNullEmptyDecValue(txtOilEle.val()),
-            Gas: isNullEmptyDecValue(txtGasEle.val()),
-            Ngl: isNullEmptyDecValue(txtNGLEle.val()),
-            Boe: isNullEmptyDecValue(txtBOEEle.val()),
-            Und_po: isNullEmptyDecValue(txtUPayoutEle.val()),
-            Pv10: isNullEmptyDecValue(txtPV10Ele.val()),
-            F_and_d: isNullEmptyDecValue(txtFDEle.val()),
-            Ror: isNullEmptyDecValue(txtRorEle.val()),
-            Mroi: isNullEmptyDecValue(txtMroiEle.val()),
-            Changed_date: new Date(),
-        }
-
-        $.ajax({
-            before: AddLoader(),
-            complete: function () {
-                setTimeout(function () {
-                    RemoveLoader();
-                }, 500);
-            },
-            type: "POST",
-            url: '/AFE/SaveHDRAndDTL',
-            data: JSON.stringify({ 'afeHDR': JSON.stringify(afeHDR), 'afeHDRDTL': JSON.stringify(afeHDRDTL) }),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            async: false,
-            cache: false,
-            success: function (data) {
-                alert(data.data);
-                if (data.IsValid) {
-                    window.location.href = '/Dashboard'
-                }
-            },
-            error: function (e1, e2, e3) {
+        if (!isApproveAFE) {
+            if (currAfeType == 0) {
+                isValidSave = false;
+                isValidStrMessage += 'AFE Type';
             }
-        });
+            if (currCat == 0) {
+                isValidSave = false;
+                isValidStrMessage += ' ,AFE Category';
+            }
+            if (isNullEmpty(currName)) {
+                isValidSave = false;
+                isValidStrMessage += ' ,AFE Name'
+            }
+            if (isNullEmpty(currNum)) {
+                isValidSave = false;
+                isValidStrMessage += ' ,AFE Number'
+            }
+            if (isNullEmpty(currDate)) {
+                isValidSave = false;
+                isValidStrMessage += ' ,AFE Date'
+            }
+        }
+        if (isSubmitTo && inboxUserID == 0) {
+            isValidSubmitTo = false;
+            isValidSubmitToMessage += 'If you need to submit your AFE to other user then Please select user.'
+        }
+        if (isValidSave && isValidSubmitTo) {
+
+            let afeHDR = {
+                Afe_hdr_id: Number(afeHDRIDEle.val()),
+                Afe_name: currName,
+                Afe_type_id: isNullEmpty(currAfeType) ? 0 : currAfeType,
+                Afe_category_id: isNullEmpty(currCat) ? 0 : currCat,
+                Afe_num: currNum,
+                Created_date: currDate,
+                Inbox_user_id: currInboxUserID,
+                Inbox_user_email: currInboxUserEmail
+            }
+
+            let afeHDRDTL = {
+                Afe_econ_dtl_id: Number(afeDTLIDEle.val()),
+                Afe_hdr_id: Number(afeHDRIDEle.val()),
+                Description: txtAreaDescEle.val(),
+                Gross_afe: isNullEmptyDecValue(txtGrossAFEEle.val()),
+                Wi: isNullEmptyDecValue(txtWIEle.val()),
+                Nri: isNullEmptyDecValue(txtNRIEle.val()),
+                Roy: isNullEmptyDecValue(txtRoyEle.val()),
+                Net_afe: isNullEmptyDecValue(txtNetAFEEle.val()),
+                Oil: isNullEmptyDecValue(txtOilEle.val()),
+                Gas: isNullEmptyDecValue(txtGasEle.val()),
+                Ngl: isNullEmptyDecValue(txtNGLEle.val()),
+                Boe: isNullEmptyDecValue(txtBOEEle.val()),
+                Und_po: isNullEmptyDecValue(txtUPayoutEle.val()),
+                Pv10: isNullEmptyDecValue(txtPV10Ele.val()),
+                F_and_d: isNullEmptyDecValue(txtFDEle.val()),
+                Ror: isNullEmptyDecValue(txtRorEle.val()),
+                Mroi: isNullEmptyDecValue(txtMroiEle.val()),
+                Changed_date: new Date(),
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/AFE/SaveHDRAndDTL',
+                data: JSON.stringify({ 'afeHDR': JSON.stringify(afeHDR), 'afeHDRDTL': JSON.stringify(afeHDRDTL), 'isApproveAFE': isApproveAFE }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                cache: false,
+                success: function (data) {
+                    alert(data.data);
+                    if (data.IsValid) {
+                        if (isApprovedAFE) {
+                            approveAFE()
+                        }
+                        else {
+                            window.location.href = '/Dashboard'
+                        }
+                    }
+                },
+                error: function (e1, e2, e3) {
+                }
+            });
+        }
+        else {
+            if (!isValidSave) {
+                firstCommaIndex = isValidStrMessage.indexOf(',') + 1
+                if (firstCommaIndex < 4) {
+                    isValidStrMessage = isValidStrMessage.substring(firstCommaIndex, isValidStrMessage.length)
+                }
+                alert(isValidStr + isValidStrMessage);
+            }
+            if (!isValidSubmitTo) {
+                alert(isValidSubmitToMessage);
+            }
+        }
+
+        setTimeout(function () {
+            RemoveLoader();
+        }, 500);
+    },500);
+}
+
+
+btnApproveEle.click(function () {
+    isApproveAFE = true;
+    if (Number(approverAmountEle.val()) >= Number(txtNetAFEEle.val())) {
+        saveHDRAndDTL(false);
+        isApprovedAFE = true;
     }
     else {
-        if (!isValidSave) {
-            firstCommaIndex = isValidStrMessage.indexOf(',') + 1
-            if (firstCommaIndex < 4) {
-                isValidStrMessage = isValidStrMessage.substring(firstCommaIndex, isValidStrMessage.length)
-            }
-            alert(isValidStr + isValidStrMessage);
-        }
-        if (!isValidSubmitTo) {
-            alert(isValidSubmitToMessage);
-        }
+        $('#usersLabel').text('Approve');
+        btnSaveHDREle.remove();
+        openUserModel();
     }
+})
+
+function approveAFE() {
+    $.ajax({
+        before: AddLoader(),
+        complete: function () {
+            setTimeout(function () {
+                RemoveLoader();
+            }, 500);
+        },
+        type: "POST",
+        url: '/AFE/ApproveAFE',
+        data: JSON.stringify({ 'afeHDRID': Number(afeHDRIDEle.val()) }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: false,
+        cache: false,
+        success: function (data) {
+            alert(data.data);
+            if (data.IsValid) {
+                window.location.href = '/AFE/ApproveEditAFE'
+            }
+        },
+        error: function (e1, e2, e3) {
+        }
+    });
 }

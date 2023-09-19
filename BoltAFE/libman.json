@@ -2,5 +2,15 @@
   "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "Scripts/jqueryui/",
+      "files": [
+        "jquery-ui.min.js",
+        "jquery-ui.js",
+        "themes/base/jquery-ui.min.css",
+        "themes/base/jquery-ui.css"
+      ]
+    }
   ]
 }

@@ -5,6 +5,7 @@ using BoltAFE.Models;
 using Dapper;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -167,7 +168,7 @@ namespace BoltAFE.Repositories.AFE
             try
             {
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
-                string query = $"SELECT  ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where Inbox_user_id = {userID}";
+                string query = $"SELECT  ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where Inbox_user_id = {userID} order by ah.Afe_hdr_id , Afe_econ_dtl_id desc";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -182,7 +183,7 @@ namespace BoltAFE.Repositories.AFE
         {
             try
             {
-                string query = $"SELECT ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email  FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where ah.Afe_hdr_id = {afeHDRID}";
+                string query = $"SELECT ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email  FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where ah.Afe_hdr_id = {afeHDRID}   order by Afe_econ_dtl_id desc";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -206,7 +207,7 @@ namespace BoltAFE.Repositories.AFE
                 throw;
             }
         }
-        
+
 
         public bool DeleteAFEHDR(int afeHDRID)
         {
@@ -260,7 +261,7 @@ namespace BoltAFE.Repositories.AFE
             finally { connection.Close(); }
         }
 
-        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL)
+        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE)
         {
             var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
             try
@@ -269,8 +270,19 @@ namespace BoltAFE.Repositories.AFE
                 var userEmail = Convert.ToString(System.Web.HttpContext.Current.Session["Email"]);
                 var afeHDRValues = JsonConvert.DeserializeObject<AfeHDRModel>(afeHDR);
                 var afeHDRDTLValues = JsonConvert.DeserializeObject<AfeEconDTLModel>(afeHDRDTL);
-                string query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeHDRValues.Afe_num}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
-                int afeHDRID = connection.Query<int>(query).FirstOrDefault();
+                int afeHDRID = 0;
+                string query = string.Empty;
+                if (!isApproveAFE)
+                {
+                     query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeHDRValues.Afe_num}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
+                    afeHDRID = connection.Query<int>(query).FirstOrDefault();
+                }
+                else
+                {
+                    afeHDRID = afeHDRValues.Afe_hdr_id;
+                    query = $"UPDATE [Afe_hdr] SET [Inbox_user_id] = {afeHDRValues.Inbox_user_id} WHERE [Afe_hdr_id] = {afeHDRID};";
+                    connection.Query<int>(query).FirstOrDefault();
+                }
                 query = $"INSERT INTO [Afe_aprvl_hist_dtl] ([Afe_hdr_id],[Approver_user_id]) VALUES ({afeHDRID} ,{afeHDRValues.Inbox_user_id}) ; INSERT INTO [Afe_econ_dtl] ([Afe_hdr_id],[Description],[Gross_afe],[Wi],[Nri],[Roy],[Net_afe],[Oil],[Gas],[Ngl],[Boe],[Und_po],[Pv10],[F_and_d],[Ror],[Mroi],[Changed_by_user_id],[Changed_date]) VALUES ({afeHDRID},'{afeHDRDTLValues.Description}',{afeHDRDTLValues.Gross_afe},{afeHDRDTLValues.Wi},{afeHDRDTLValues.Nri},{afeHDRDTLValues.Roy},{afeHDRDTLValues.Net_afe},{afeHDRDTLValues.Oil},{afeHDRDTLValues.Gas},{afeHDRDTLValues.Ngl},{afeHDRDTLValues.Boe},{afeHDRDTLValues.Und_po},{afeHDRDTLValues.Pv10},{afeHDRDTLValues.F_and_d},{afeHDRDTLValues.Ror},{afeHDRDTLValues.Mroi},{userID},'{afeHDRDTLValues.Changed_date}') ; UPDATE [Afe_comments] SET [Afe_hdr_id] ={afeHDRID}   where  [User_id] = {userID} and [Afe_hdr_id] = 0 ; UPDATE [Afe_docs] SET [Afe_hdr_id] = {afeHDRID} where [User_id] ={userID} and [Afe_hdr_id] = 0";
                 int inserted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
                 if (userID != afeHDRValues.Inbox_user_id)
@@ -284,7 +296,42 @@ namespace BoltAFE.Repositories.AFE
                 CommonDatabaseOperationHelper.Log(" SaveHDRAndDTL =>", ex.Message + "==>" + ex.StackTrace, true);
                 return false;
             }
+            finally { connection.Close(); }
         }
+        #endregion
+
+        #region Approve AFE
+
+        public bool ApproveAFE(int afeHDRID)
+        {
+            var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
+            try
+            {
+                string query = $"UPDATE [Afe_hdr] SET [Inbox_user_id] = -1 WHERE [Afe_hdr_id] = {afeHDRID};";
+                var userEmail = Convert.ToString(System.Web.HttpContext.Current.Session["Email"]);
+                var afeApprovalHistory = GetAFEHdrAprvlHistory(afeHDRID);
+                var afeApprovalHistoryList = JsonConvert.DeserializeObject<List<AfeApprovalHistoryModel>>(afeApprovalHistory);
+                var afeDetail = JsonConvert.DeserializeObject<List<AfeHDRModel>>(GetAFE(afeHDRID));
+                List<string> emailArray = new List<string>();
+                foreach (var afeApproval in afeApprovalHistoryList)
+                {
+                    if (!emailArray.Contains(afeApproval.User_email.ToLower()))
+                    {
+                        Helper.SendEmailOfAFEApprroved(afeApproval.User_email, userEmail, afeDetail[0].Afe_name, afeDetail[0].Afe_num, _adminRepository);
+                        emailArray.Add(afeApproval.User_email.ToLower());
+                    }
+                }
+                int isApproved = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" SaveHDRAndDTL =>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
+            }
+            finally { connection.Close(); }
+        }
+
         #endregion
     }
 }

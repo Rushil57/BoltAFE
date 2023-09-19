@@ -14,6 +14,7 @@
             <a class="navbar-brand ms-2" href="@Url.Action("Index","Dashboard")">BoltAFE</a>
             <a href="#" id="userEmail" class="float-end ms-1" style="color: wheat; font-size: smaller">User: @HttpContext.Current.Session["Email"]</a>
             <input type="hidden" id="userID" value="@HttpContext.Current.Session["UserId"]" />
+            <input type="hidden" id="approverAmount" value="@HttpContext.Current.Session["Approver_amount"]" />
             <div class="d-flex"></div>
             <div class="d-flex"></div>
             <div class="d-flex">

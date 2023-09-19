@@ -41,7 +41,7 @@ namespace BoltAFE.Repositories.Login
             try
             {
                 password = Helper.EncryptString(password);
-                string query = $"SELECT u.User_ID, u.User_email,u.Reset_password,u.Password FROM UserDetail u WHERE u.User_email=@Email AND U.Password = @Password";
+                string query = $"SELECT u.User_ID, u.User_email,u.Reset_password,u.Password,u.Approver_amount  FROM UserDetail u WHERE u.User_email=@Email AND U.Password = @Password";
                 DataTable dt = CommonDatabaseOperationHelper.Get_Master(query, new { @Email = email, @Password = password });
                 if (dt.Rows.Count > 0)
                 {
@@ -51,7 +51,8 @@ namespace BoltAFE.Repositories.Login
                         id = firstRow["User_ID"],
                         USER_EMAIL = firstRow["user_email"],
                         ResetPassword = firstRow["reset_password"],
-                        Password = firstRow["password"]
+                        Password = firstRow["password"],
+                        Approver_amount = firstRow["Approver_amount"],
                     };
                     result.Add(obj);
                 }

@@ -151,6 +151,7 @@
     <Compile Include="Helpers\GlobalClass.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\SessionTimeoutAttribute.cs" />
+    <Compile Include="Models\AfeApprovalHistoryModel.cs" />
     <Compile Include="Models\AfeEconDTLModel.cs" />
     <Compile Include="Models\AfeHDRModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
@@ -216,6 +217,10 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jqueryui\jquery-ui.js" />
+    <Content Include="Scripts\jqueryui\jquery-ui.min.js" />
+    <Content Include="Scripts\jqueryui\jquery-ui.css" />
+    <Content Include="Scripts\jqueryui\jquery-ui.min.css" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
