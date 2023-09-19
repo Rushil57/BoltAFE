@@ -227,13 +227,16 @@ namespace BoltAFE.Controllers
         public string GetAFE(int afeHDRID)
         {
             string AFEHdr = string.Empty;
+            string AFEHdrAprvlHistory = string.Empty;
             try
             {
                 AFEHdr = _aFERepository.GetAFE(afeHDRID);
+                AFEHdrAprvlHistory = _aFERepository.GetAFEHdrAprvlHistory(afeHDRID);
                 return JsonConvert.SerializeObject(new
                 {
                     IsValid = true,
-                    AFEHdr = AFEHdr
+                    AFEHdr = AFEHdr,
+                    AFEHdrAprvlHistory = AFEHdrAprvlHistory
                 });
             }
             catch (Exception ex)
@@ -243,7 +246,8 @@ namespace BoltAFE.Controllers
             return JsonConvert.SerializeObject(new
             {
                 IsValid = false,
-                AFEHdr = AFEHdr
+                AFEHdr = AFEHdr,
+                AFEHdrAprvlHistory = AFEHdrAprvlHistory
             });
         }
         [HttpPost]

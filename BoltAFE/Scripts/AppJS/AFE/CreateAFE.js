@@ -35,6 +35,8 @@ var txtFDEle = $('#txtFD');
 var txtRorEle = $('#txtRor');
 var txtMroiEle = $('#txtMroi');
 var afeDTLIDEle = $('#afeDTLID');
+
+var tblPrevAppBodyEle = $('#tblPrevApp >  tbody');
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -73,6 +75,7 @@ function GetAFE() {
                 return;
             }
             let afeHDR = JSON.parse(data.AFEHdr);
+            let afeHdrAprvlHistory = JSON.parse(data.AFEHdrAprvlHistory);
             if (afeHDR.length == 1) {
                 $('#lblAfeName').text(afeHDR[0].Afe_name);
                 $('#lblAfeType').text(afeHDR[0].Type);
@@ -81,7 +84,31 @@ function GetAFE() {
                 $('#lblAfeDate').text(afeHDR[0].Created_date);
                 txtAreaDescEle.text(afeHDR[0].Description);
                 afeDTLIDEle.val(afeHDR[0].Afe_econ_dtl_id);
+                txtGrossAFEEle.val(afeHDR[0].Gross_afe);
+                txtWIEle.val(afeHDR[0].Wi);
+                txtNRIEle.val(afeHDR[0].Nri);
+                txtRoyEle.val(afeHDR[0].Roy);
+                txtNetAFEEle.val(afeHDR[0].Net_afe);
+                txtOilEle.val(afeHDR[0].Oil);
+                txtGasEle.val(afeHDR[0].Gas);
+                txtNGLEle.val(afeHDR[0].Ngl);
+                txtBOEEle.val(afeHDR[0].Boe);
+                txtUPayoutEle.val(afeHDR[0].Und_po);
+                txtPV10Ele.val(afeHDR[0].Pv10);
+                txtFDEle.val(afeHDR[0].F_and_d);
+                txtRorEle.val(afeHDR[0].Ror);
+                txtMroiEle.val(afeHDR[0].Mroi);
             }
+            tblPrevAppBodyEle.html('');
+            tblPrevAppBodyStr = '';
+            for (var i = 0; i < afeHdrAprvlHistory.length; i++) {
+                let currAprlHistoryID = afeHdrAprvlHistory[i].Aprvl_hist_dtl_id;
+                let currAprlUserID = afeHdrAprvlHistory[i].Approver_user_id;
+                let currPreviousAprlEmail = isNullEmptyValue(afeHdrAprvlHistory[i].User_email);
+                let currAprlDate = getFormattedDateTime(afeHdrAprvlHistory[i].Approved_date);
+                tblPrevAppBodyStr += '<tr><input type="hidden" class="aprlHistoryID" value="' + currAprlHistoryID + '"><input class="aprlUserID" type="hidden" value="' + currAprlUserID + '"><td>' + currPreviousAprlEmail + '</td><td>' + currAprlDate +'</td></tr>'
+            }
+            tblPrevAppBodyEle.html(tblPrevAppBodyStr);
         },
         error: function (err) {
             console.log(err);

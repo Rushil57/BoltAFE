@@ -44,7 +44,7 @@ function GetAllAFE() {
                 let afeNetAmount = isNullEmptyValue(afeHdrs[i].Net_afe);
                 let afePV10 = isNullEmptyValue(afeHdrs[i].Pv10);
                 let afeROR = isNullEmptyValue(afeHdrs[i].Ror);
-                let afeUserInbox = isNullEmptyValue(afeHdrs[i].Inbox_user_id);
+                let afeUserInbox = userEmail;
                 let currentTrashIcon = Number(userIDEle.val()) == cretaedBy ? trashIcon : '';
 
                 afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID + '\'">' + pencilIcon + '</td><td onclick="deleteAfeHDR('+ afeHDRID +')">' + currentTrashIcon + '</td></tr>';

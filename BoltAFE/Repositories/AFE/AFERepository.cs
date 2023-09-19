@@ -126,14 +126,27 @@ namespace BoltAFE.Repositories.AFE
         }
         public bool DeleteDoc(int afeHDRID, int docID)
         {
+            var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
             try
             {
-                string query = $"DELETE FROM [Afe_docs] where Afe_hdr_id = {afeHDRID}  and Afe_doc_id = {docID}";
+                string query = $"SELECT Doc_path  FROM [Afe_docs] where Afe_hdr_id = {afeHDRID}  and Afe_doc_id = {docID}";
                 if (afeHDRID == 0)
                 {
                     var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
                     query += $" and User_id = {userID}";
                 }
+                string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
+                var allFilesPath = connection.Query<string>(query).ToList();
+                foreach (var filePath in allFilesPath)
+                {
+                    string docFullPath = path + filePath.ToString().Substring(2).Replace('/', '\\');
+                    if (File.Exists(docFullPath))
+                    {
+                        File.Delete(docFullPath);
+                    }
+                }
+                query = query.Replace("SELECT Doc_path ", "DELETE");
+
                 int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
                 return true;
             }
@@ -142,6 +155,7 @@ namespace BoltAFE.Repositories.AFE
                 CommonDatabaseOperationHelper.Log(" InsertComment=>", ex.Message + "==>" + ex.StackTrace, true);
                 return false;
             }
+            finally { connection.Close(); }
         }
 
 
@@ -153,7 +167,7 @@ namespace BoltAFE.Repositories.AFE
             try
             {
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
-                string query = $"SELECT * FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where Inbox_user_id = {userID}";
+                string query = $"SELECT  ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where Inbox_user_id = {userID}";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -168,7 +182,7 @@ namespace BoltAFE.Repositories.AFE
         {
             try
             {
-                string query = $"SELECT * FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where ah.Afe_hdr_id = {afeHDRID}";
+                string query = $"SELECT ah.*,aed.*,ac.*,at.*,ud.User_ID,ud.User_email  FROM [Afe_hdr] ah left join Afe_econ_dtl aed on aed.Afe_hdr_id = ah.Afe_hdr_id left join Afe_category ac on ah.Afe_category_id = ac.Afe_category_id left join Afe_type at on ah.Afe_type_id = at.Afe_type_id   left join UserDetail ud  on ud.User_ID = ah.Created_By where ah.Afe_hdr_id = {afeHDRID}";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -178,6 +192,21 @@ namespace BoltAFE.Repositories.AFE
                 throw;
             }
         }
+        public string GetAFEHdrAprvlHistory(int afeHDRID)
+        {
+            try
+            {
+                string query = $"SELECT aphd.*,ud.User_ID,ud.User_email FROM  [Afe_aprvl_hist_dtl] aphd join UserDetail ud on ud.User_ID = aphd.Approver_user_id where aphd.Afe_hdr_id = {afeHDRID}";
+                DataTable dt = CommonDatabaseOperationHelper.Get(query);
+                return JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetAFEHdrAprvlHistory =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
+        
 
         public bool DeleteAFEHDR(int afeHDRID)
         {

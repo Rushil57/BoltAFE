@@ -11,6 +11,7 @@
         bool DeleteDoc(int afeHDRID, int docID);
         string GetAllAFE();
         string GetAFE(int afeHDRID);
+        string GetAFEHdrAprvlHistory(int afeHDRID);
 
         bool DeleteAFEHDR(int afeHDRID);
 
