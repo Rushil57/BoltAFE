@@ -42,7 +42,9 @@ var approverAmountEle = $('#approverAmount');
 var isApproveAFE = false;
 var isApprovedAFE = false;
 var lblAfeNameEle = $('#lblAfeName');
-var lblAfeNumEle = $('#lblAfeNum')
+var lblAfeNumEle = $('#lblAfeNum');
+
+let uploadedFileWithZero = [];
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -321,6 +323,9 @@ function getDocuments() {
                 return;
             }
             docArr = JSON.parse(data.docs)
+            for (var i = 0; i < uploadedFileWithZero.length; i++) {
+                docArr.push(uploadedFileWithZero[i]);
+            }
             bindAFEDoc();
         },
         error: function (err) {
@@ -337,7 +342,7 @@ function saveDocument() {
     }
     var formData = new FormData();
     formData.append("file", files[0]);
-    formData.append("afeHDRID", afeHDRIDEle.val());
+    formData.append("afeHDRID", 0);
     formData.append("docDiscription", docDescriptionEle.val());
     $.ajax({
         before: AddLoader(),
@@ -356,6 +361,7 @@ function saveDocument() {
             alert(newData.data);
             if (newData.IsValid) {
                 closeModel('importFile');
+                uploadedFileWithZero.push({ Afe_doc_id: newData.createdFileID, Afe_hdr_id: afeHDRIDEle.val(), User_id: userIDEle.val(), Doc_path: './' + newData.folderPath.replace("\\","/"), Doc_description: docDescriptionEle.val() })
                 getDocuments();
             }
         },
@@ -370,7 +376,7 @@ function saveComment() {
     if (textareas.length > 0) {
         var lastTestArea = textareas[textareas.length - 1];
         var lastTestAreaComm = $(lastTestArea).val();
-        let afeHDRID = afeHDRIDEle.val();
+        let afeHDRID = 0;
         if (isNullEmpty(lastTestAreaComm)) {
             alert('Please enter comment.');
             return;
