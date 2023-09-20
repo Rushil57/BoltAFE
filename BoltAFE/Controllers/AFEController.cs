@@ -20,7 +20,7 @@ namespace BoltAFE.Controllers
         }
 
         #region Views 
-        public ActionResult CreateAFE(int afeHDR=0,int afeDTLID = 0)
+        public ActionResult CreateAFE(int afeHDR = 0, int afeDTLID = 0)
         {
             ViewBag.AfeHDRID = afeHDR;
             ViewBag.AfeDTLID = afeDTLID;
@@ -38,16 +38,19 @@ namespace BoltAFE.Controllers
         public string GetAFETypesAndCategories()
         {
             string AFETypes = string.Empty;
+            string AFETypesRecordDTL = string.Empty;
             string AFECategories = string.Empty;
             try
             {
                 AFETypes = _aFERepository.GetTypes();
+                AFETypesRecordDTL = _aFERepository.GetTypesRecordDetails();
                 AFECategories = _aFERepository.GetCategories();
                 return JsonConvert.SerializeObject(new
                 {
                     IsValid = true,
                     AFETypes = AFETypes,
-                    AFECategories = AFECategories
+                    AFECategories = AFECategories,
+                    AFETypesRecordDTL = AFETypesRecordDTL
                 });
             }
             catch (Exception ex)
@@ -58,7 +61,8 @@ namespace BoltAFE.Controllers
             {
                 IsValid = false,
                 AFETypes = AFETypes,
-                AFECategories = AFECategories
+                AFECategories = AFECategories,
+                AFETypesRecordDTL = AFETypesRecordDTL
             });
         }
 
@@ -75,7 +79,7 @@ namespace BoltAFE.Controllers
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
                 if (userID > 0)
                 {
-                    comments = _aFERepository.GetComments(afeHDRID,userID);
+                    comments = _aFERepository.GetComments(afeHDRID, userID);
                     isValid = true;
                 }
             }
@@ -137,7 +141,7 @@ namespace BoltAFE.Controllers
         #region Upload File
 
         [HttpPost]
-        public string UploadFile(HttpPostedFileBase file, int afeHDRID,  string docDiscription)
+        public string UploadFile(HttpPostedFileBase file, int afeHDRID, string docDiscription)
         {
             string path = string.Empty;
             string folderPath = string.Empty;
@@ -162,7 +166,7 @@ namespace BoltAFE.Controllers
             {
                 CommonDatabaseOperationHelper.Log("UploadFile =>", ex.Message + "==>" + ex.StackTrace, true);
             }
-            return JsonConvert.SerializeObject(new { IsValid = false, data = "Issue occured when file is imported.", folderPath = folderPath , createdFileID  = createdFileID });
+            return JsonConvert.SerializeObject(new { IsValid = false, data = "Issue occured when file is imported.", folderPath = folderPath, createdFileID = createdFileID });
         }
         #endregion
 
@@ -182,7 +186,7 @@ namespace BoltAFE.Controllers
             return JsonConvert.SerializeObject(new { IsValid = false, docs = docs });
         }
 
-        public string DeleteDocument(int afeHDRID , int docID)
+        public string DeleteDocument(int afeHDRID, int docID)
         {
             bool isValid = false;
             string data = string.Empty;
@@ -272,7 +276,7 @@ namespace BoltAFE.Controllers
 
         #region Save AFE and DTL
 
-        public string SaveHDRAndDTL(string afeHDR , string afeHDRDTL,bool isApproveAFE)
+        public string SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE)
         {
             bool isValid = false;
             bool isDuplicateAFENum = false;
@@ -283,16 +287,10 @@ namespace BoltAFE.Controllers
                 if (userID > 0)
                 {
                     isDuplicateAFENum = isApproveAFE ? isDuplicateAFENum : _aFERepository.CheckIfDuplicateAFENum(afeHDR);
-                    if (!isDuplicateAFENum)
-                    {
-                        var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL, isApproveAFE);
-                        isValid = true;
-                        data = "AFE Header and Details saved successfully.";
-                    }
-                    else
-                    {
-                        data = "This AFE Number is duplicate please enter unique.";
-                    }
+                    var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL, isApproveAFE, isDuplicateAFENum);
+                    isValid = true;
+                    data = "AFE Header and Details saved successfully.";
+
                 }
             }
             catch (Exception ex)

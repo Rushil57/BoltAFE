@@ -3,6 +3,7 @@
     public interface IAFERepository
     {
         string GetTypes();
+        string GetTypesRecordDetails();
         string GetCategories();
         bool InsertComment(int afeHDRID, string message, int userID);
         string GetComments(int afeHDRID, int userID);
@@ -16,7 +17,7 @@
         bool DeleteAFEHDR(int afeHDRID);
 
         bool CheckIfDuplicateAFENum(string afeHDR);
-        bool SaveHDRAndDTL(string afeHDR,string afeHDRDTL,bool isDuplicateAFENum);
+        bool SaveHDRAndDTL(string afeHDR,string afeHDRDTL,bool isApproveAFE, bool isDuplicateAFENum);
 
         bool ApproveAFE(int afeHDRID);
     }

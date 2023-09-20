@@ -50,6 +50,22 @@ namespace BoltAFE.Repositories.AFE
             }
         }
 
+        public string GetTypesRecordDetails()
+        {
+            try
+            {
+                //string query = $"select Month(Created_date) as month ,YEAR(Created_date)as year,count(Afe_type_id) as count,Afe_type_id  from  Afe_hdr where Month(Created_date) = month(getdate()) and YEAR(Created_date)  = year(getdate()) group by Afe_type_id,Month(Created_date),YEAR(Created_date)"; 
+                string query = $"select count(Afe_type_id) as count,Afe_type_id  from Afe_hdr  group by Afe_type_id";
+                DataTable dt = CommonDatabaseOperationHelper.Get(query);
+                return JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetTypesRecordDetails =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
+
         #region Comment
 
         public string GetComments(int afeHDRID, int userID)
@@ -261,7 +277,7 @@ namespace BoltAFE.Repositories.AFE
             finally { connection.Close(); }
         }
 
-        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE)
+        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE,bool isDuplicateAFENum)
         {
             var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
             try
@@ -274,7 +290,14 @@ namespace BoltAFE.Repositories.AFE
                 string query = string.Empty;
                 if (!isApproveAFE)
                 {
-                     query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeHDRValues.Afe_num}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
+                    string afeNumber = afeHDRValues.Afe_num;
+                    if (isDuplicateAFENum)
+                    {
+                        var afeNumberSplit = afeNumber.Split('-');
+                        var lastDigitChange = (Convert.ToInt32(afeNumberSplit[1]) + 1).ToString("00");
+                        afeNumber = afeNumberSplit[0] + "-" + lastDigitChange;
+                    }
+                     query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeNumber}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
                     afeHDRID = connection.Query<int>(query).FirstOrDefault();
                 }
                 else

@@ -1,5 +1,6 @@
 ﻿var afeTypes = [];
 var afeCategories = [];
+var afeTypesRecordDTL = [];
 var afeTypeSelectEle = $('#afeTypeSelect');
 var afeCatSelectEle = $('#afeCatSelect');
 var tblDocDtlBodyEle = $('#tblDocDtl >  tbody');
@@ -215,7 +216,7 @@ function GetAFETypesAndCategories() {
             }
             afeTypes = JSON.parse(data.AFETypes);
             afeCategories = JSON.parse(data.AFECategories);
-
+            afeTypesRecordDTL = JSON.parse(data.AFETypesRecordDTL);
             let afeTypesStr = '<option value="0">-- Select --</option>';
             let afeCategoriesStr = '<option value="0">-- Select --</option>';
 
@@ -657,4 +658,22 @@ function approveAFE() {
         error: function (e1, e2, e3) {
         }
     });
+}
+
+function bindAFENumber() {
+    let currAfeTypeID = Number(afeTypeSelectEle.find(':selected').val());
+    let currentAFENumerDTL = afeTypesRecordDTL.filter(x => x.Afe_type_id == currAfeTypeID);
+    let afeTypesForCode = afeTypes.filter(x => x.Afe_type_id == currAfeTypeID);
+    let currentDate = new Date();
+    let currentAFENumerDTLCount = currentAFENumerDTL.length > 0 ? (currentAFENumerDTL[0].count + 1): 01;
+    if (afeTypesForCode.length > 0) {
+        let afeNumber = afeTypesForCode[0].Afe_num_code + (currentDate.getMonth() + 1).toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        }) + currentDate.getFullYear() + "-" + currentAFENumerDTLCount.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        });
+        txtAFENumEle.val(afeNumber)
+    }
 }
