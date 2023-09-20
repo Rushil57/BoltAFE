@@ -36,6 +36,7 @@ var txtRorEle = $('#txtRor');
 var txtMroiEle = $('#txtMroi');
 var afeDTLIDEle = $('#afeDTLID');
 var btnApproveEle = $('#btnApprove');
+var btnReturnToEle = $('#btnReturnTo');
 var tblPrevAppBodyEle = $('#tblPrevApp >  tbody');
 
 var approverAmountEle = $('#approverAmount');
@@ -43,8 +44,11 @@ var isApproveAFE = false;
 var isApprovedAFE = false;
 var lblAfeNameEle = $('#lblAfeName');
 var lblAfeNumEle = $('#lblAfeNum');
+var usersLabelEle = $('#usersLabel');
 
-let uploadedFileWithZero = [];
+var uploadedFileWithZero = [];
+var afeHDR = '';
+var afeHdrAprvlHistory = ''
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -82,8 +86,8 @@ function GetAFE() {
             if (!data.IsValid) {
                 return;
             }
-            let afeHDR = JSON.parse(data.AFEHdr);
-            let afeHdrAprvlHistory = JSON.parse(data.AFEHdrAprvlHistory);
+            afeHDR = JSON.parse(data.AFEHdr);
+            afeHdrAprvlHistory = JSON.parse(data.AFEHdrAprvlHistory);
             $('input').tooltip('dispose');
             if (afeHDR.length > 0) {
                 lblAfeNameEle.text(afeHDR[0].Afe_name);
@@ -169,21 +173,25 @@ function GetUsers() {
                 return;
             }
             users = JSON.parse(data.users);
-            users = users.filter(x => x.User_email != userEmail)
-            var usersListBoxStr = '<select class="form-select cls-listBox" name="users" size="' + users.length + '">'
-            for (var i = 0; i < users.length; i++) {
-                let userID = users[i].User_ID;
-                let userEmail = users[i].User_email;
-                usersListBoxStr += ' <option value="' + userID + '">' + userEmail + '</option>'
-            }
-            usersListBoxStr += '</select>';
-            usersModelBodyEle.html('');
-            usersModelBodyEle.html(usersListBoxStr);
+            bindUsersList();
         },
         error: function (err) {
             console.log(err);
         }
     });
+}
+
+function bindUsersList() {
+    users = users.filter(x => x.User_email != userEmail)
+    var usersListBoxStr = '<select class="form-select cls-listBox" name="users" size="' + users.length + '">'
+    for (var i = 0; i < users.length; i++) {
+        let userID = users[i].User_ID;
+        let userEmail = users[i].User_email;
+        usersListBoxStr += ' <option value="' + userID + '">' + userEmail + '</option>'
+    }
+    usersListBoxStr += '</select>';
+    usersModelBodyEle.html('');
+    usersModelBodyEle.html(usersListBoxStr);
 }
 function GetAFETypesAndCategories() {
     $.ajax({
@@ -361,7 +369,7 @@ function saveDocument() {
             alert(newData.data);
             if (newData.IsValid) {
                 closeModel('importFile');
-                uploadedFileWithZero.push({ Afe_doc_id: newData.createdFileID, Afe_hdr_id: afeHDRIDEle.val(), User_id: userIDEle.val(), Doc_path: './' + newData.folderPath.replace("\\","/"), Doc_description: docDescriptionEle.val() })
+                uploadedFileWithZero.push({ Afe_doc_id: newData.createdFileID, Afe_hdr_id: afeHDRIDEle.val(), User_id: userIDEle.val(), Doc_path: './' + newData.folderPath.replace("\\", "/"), Doc_description: docDescriptionEle.val() })
                 getDocuments();
             }
         },
@@ -579,7 +587,7 @@ function saveHDRAndDTL(isSubmitTo) {
         setTimeout(function () {
             RemoveLoader();
         }, 500);
-    },500);
+    }, 500);
 }
 
 
@@ -590,12 +598,41 @@ btnApproveEle.click(function () {
         isApprovedAFE = true;
     }
     else {
-        $('#usersLabel').text('Approve');
+        usersLabelEle.text('Approve');
+        btnSubmitToEle.text('Submit To');
         btnSaveHDREle.remove();
         openUserModel();
+        bindUsersList();
     }
 })
 
+btnReturnToEle.click(function () {
+    isApproveAFE = true;
+    usersLabelEle.text('Return To');
+    btnSubmitToEle.text('Return To');
+    btnSaveHDREle.remove();
+    openUserModel();
+    bindReturnUsersList();
+});
+
+function bindReturnUsersList() {
+    
+
+    let uniqueReturnToUsers = [];
+    usersListBoxOptionStr = '';
+    for (var i = 0; i < afeHdrAprvlHistory.length; i++) {
+        let userID = afeHdrAprvlHistory[i].User_ID;
+        if ($.inArray(userID, uniqueReturnToUsers) !== -1) {
+            continue;
+        }
+        uniqueReturnToUsers.push(userID);
+        let userEmail = afeHdrAprvlHistory[i].User_email;
+        usersListBoxOptionStr += ' <option value="' + userID + '">' + userEmail + '</option>'
+    }
+    var usersListBoxStr = '<select class="form-select cls-listBox" name="users" size="' + uniqueReturnToUsers.length + '">' + usersListBoxOptionStr + '</select>';
+    usersModelBodyEle.html('');
+    usersModelBodyEle.html(usersListBoxStr);
+}
 function approveAFE() {
     $.ajax({
         before: AddLoader(),
