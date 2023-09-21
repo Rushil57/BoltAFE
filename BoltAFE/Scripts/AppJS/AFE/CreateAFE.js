@@ -297,6 +297,7 @@ function bindAFEComment() {
 }
 function bindAFEDoc() {
     var tblDocDtlBodyStr = '';
+    let currentDocIDArr = [];
     for (var i = 0; i < docArr.length; i++) {
         let colorClass = i % 2 == 0 ? 'evenRowBgColor' : 'oddRowBgColor';
         let currDocPath = isNullEmpty(docArr[i].Doc_path) ? "" : docArr[i].Doc_path;
@@ -304,7 +305,9 @@ function bindAFEDoc() {
         let userID = docArr[i].User_id;
         let currDocID = Number(userIDEle.val()) == userID ? docArr[i].Afe_doc_id : 0;
         let currentTrashIcon = Number(userIDEle.val()) == userID ? trashIcon : '';
-        if (currDocPath != "") {
+
+        if (currDocPath != "" && $.inArray(currDocID, currentDocIDArr) == -1) {
+            currentDocIDArr.push(currDocID);
             tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td onclick="openDoc(\'' + docArr[i].Doc_path.substring(1) + '\')">' + eyeIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
         }
     }
@@ -345,6 +348,7 @@ function deleteDoc(docID) {
                 if (!data.IsValid) {
                     return;
                 }
+                uploadedFileWithZero = uploadedFileWithZero.filter(x => x.Afe_doc_id != docID);
                 getDocuments();
             },
             error: function (err) {
