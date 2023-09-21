@@ -3,7 +3,7 @@
     public interface IAFERepository
     {
         string GetTypes();
-        string GetTypesRecordDetails();
+        string GetTypesRecordDetails(int month, int year);
         string GetCategories();
         bool InsertComment(int afeHDRID, string message, int userID);
         string GetComments(int afeHDRID, int userID);

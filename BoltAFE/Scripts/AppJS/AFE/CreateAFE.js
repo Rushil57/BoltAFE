@@ -95,7 +95,7 @@ function GetAFE() {
                 $('#lblAfeType').text(afeHDR[0].Type);
                 $('#lblAfeCategory').text(afeHDR[0].Category);
                 lblAfeNumEle.text(afeHDR[0].Afe_num);
-                $('#lblAfeDate').text(afeHDR[0].Created_date);
+                $('#lblAfeDate').text(getFormattedDate(afeHDR[0].Created_date));
                 txtAreaDescEle.text(afeHDR[0].Description);
                 afeDTLIDEle.val(afeHDR[0].Afe_econ_dtl_id);
                 txtGrossAFEEle.val(afeHDR[0].Gross_afe);
@@ -216,7 +216,6 @@ function GetAFETypesAndCategories() {
             }
             afeTypes = JSON.parse(data.AFETypes);
             afeCategories = JSON.parse(data.AFECategories);
-            afeTypesRecordDTL = JSON.parse(data.AFETypesRecordDTL);
             let afeTypesStr = '<option value="0">-- Select --</option>';
             let afeCategoriesStr = '<option value="0">-- Select --</option>';
 
@@ -235,6 +234,44 @@ function GetAFETypesAndCategories() {
 
             afeTypeSelectEle.html(afeTypesStr);
             afeCatSelectEle.html(afeCategoriesStr);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+    GetTypesRecordDetails();
+}
+
+function GetTypesRecordDetails() {
+    let currDate = txtAfeDateEle.val();
+    let currMonth = new Date().getMonth() + 1;
+    let currYear = new Date().getFullYear();
+    if (!isNullEmpty(currDate)) {
+        currDate = new Date(currDate);
+        currMonth = currDate.getMonth() + 1;
+        currYear = currDate.getFullYear();
+    }
+    $.ajax({
+        beforeSend: function () {
+            AddLoader();
+        },
+        complete: function () {
+            setTimeout(function () {
+                RemoveLoader();
+            }, 500);
+        },
+        url: '/AFE/GetTypesRecordDetails',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'GET',
+        async: false,
+        data: { 'month': currMonth, 'year': currYear },
+        success: function (data) {
+            if (!data.IsValid) {
+                return;
+            }
+            afeTypesRecordDTL = JSON.parse(data.AFETypesRecordDTL);
+            bindAFENumber();
         },
         error: function (err) {
             console.log(err);
@@ -617,7 +654,7 @@ btnReturnToEle.click(function () {
 });
 
 function bindReturnUsersList() {
-    
+
 
     let uniqueReturnToUsers = [];
     usersListBoxOptionStr = '';
@@ -665,7 +702,14 @@ function bindAFENumber() {
     let currentAFENumerDTL = afeTypesRecordDTL.filter(x => x.Afe_type_id == currAfeTypeID);
     let afeTypesForCode = afeTypes.filter(x => x.Afe_type_id == currAfeTypeID);
     let currentDate = new Date();
-    let currentAFENumerDTLCount = currentAFENumerDTL.length > 0 ? (currentAFENumerDTL[0].count + 1): 01;
+
+
+    let currDate = txtAfeDateEle.val();
+    if (!isNullEmpty(currDate)) {
+        currentDate = new Date(currDate);
+    }
+
+    let currentAFENumerDTLCount = currentAFENumerDTL.length > 0 ? (currentAFENumerDTL[0].count + 1) : 01;
     if (afeTypesForCode.length > 0) {
         let afeNumber = afeTypesForCode[0].Afe_num_code + (currentDate.getMonth() + 1).toLocaleString('en-US', {
             minimumIntegerDigits: 2,
@@ -677,3 +721,7 @@ function bindAFENumber() {
         txtAFENumEle.val(afeNumber)
     }
 }
+
+txtAfeDateEle.change(function () {
+    GetTypesRecordDetails();
+})

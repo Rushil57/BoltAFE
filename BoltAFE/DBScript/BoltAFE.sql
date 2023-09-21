@@ -1,12 +1,12 @@
 USE [master]
 GO
-/****** Object:  Database [BoltAFE]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Database [BoltAFE]    Script Date: 21-09-2023 10:39:24 AM ******/
 CREATE DATABASE [BoltAFE]
-Go
+ GO
 
 USE [BoltAFE]
 GO
-/****** Object:  Table [dbo].[Afe_aprvl_hist_dtl]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_aprvl_hist_dtl]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Afe_aprvl_hist_dtl](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_category]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_category]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -36,7 +36,7 @@ CREATE TABLE [dbo].[Afe_category](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_comments]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_comments]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,7 +53,7 @@ CREATE TABLE [dbo].[Afe_comments](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_docs]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_docs]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,7 +72,7 @@ CREATE TABLE [dbo].[Afe_docs](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_econ_dtl]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_econ_dtl]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -103,7 +103,7 @@ CREATE TABLE [dbo].[Afe_econ_dtl](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_hdr]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_hdr]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -127,7 +127,7 @@ CREATE TABLE [dbo].[Afe_hdr](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_type]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[Afe_type]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -149,13 +149,14 @@ CREATE TABLE [dbo].[Afe_type](
 	[Include_f_and_d] [bit] NULL,
 	[Include_ror] [bit] NULL,
 	[Include_mroi] [bit] NULL,
+	[Afe_num_code] [nvarchar](50) NULL,
  CONSTRAINT [PK_Afe_type] PRIMARY KEY CLUSTERED 
 (
 	[Afe_type_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransactionLog]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[TransactionLog]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -166,7 +167,7 @@ CREATE TABLE [dbo].[TransactionLog](
 	[Note] [varchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserDetail]    Script Date: 15-09-2023 05:41:45 PM ******/
+/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-09-2023 10:39:24 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

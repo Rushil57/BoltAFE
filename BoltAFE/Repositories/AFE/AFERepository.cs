@@ -50,12 +50,12 @@ namespace BoltAFE.Repositories.AFE
             }
         }
 
-        public string GetTypesRecordDetails()
+        public string GetTypesRecordDetails(int month, int year)
         {
             try
             {
-                //string query = $"select Month(Created_date) as month ,YEAR(Created_date)as year,count(Afe_type_id) as count,Afe_type_id  from  Afe_hdr where Month(Created_date) = month(getdate()) and YEAR(Created_date)  = year(getdate()) group by Afe_type_id,Month(Created_date),YEAR(Created_date)"; 
-                string query = $"select count(Afe_type_id) as count,Afe_type_id  from Afe_hdr  group by Afe_type_id";
+                string query = $"select Month(Created_date) as month ,YEAR(Created_date)as year,count(Afe_type_id) as count,Afe_type_id  from  Afe_hdr where Month(Created_date) = {month} and YEAR(Created_date)  = {year} group by Afe_type_id,Month(Created_date),YEAR(Created_date)";
+                //string query = $"select count(Afe_type_id) as count,Afe_type_id  from Afe_hdr  group by Afe_type_id";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }

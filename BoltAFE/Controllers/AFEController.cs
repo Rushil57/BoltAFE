@@ -43,7 +43,6 @@ namespace BoltAFE.Controllers
             try
             {
                 AFETypes = _aFERepository.GetTypes();
-                AFETypesRecordDTL = _aFERepository.GetTypesRecordDetails();
                 AFECategories = _aFERepository.GetCategories();
                 return JsonConvert.SerializeObject(new
                 {
@@ -62,6 +61,29 @@ namespace BoltAFE.Controllers
                 IsValid = false,
                 AFETypes = AFETypes,
                 AFECategories = AFECategories,
+                AFETypesRecordDTL = AFETypesRecordDTL
+            });
+        }
+
+        public string GetTypesRecordDetails(int month, int year)
+        {
+            string AFETypesRecordDTL = string.Empty;
+            try
+            {
+                AFETypesRecordDTL = _aFERepository.GetTypesRecordDetails(month,year);
+                return JsonConvert.SerializeObject(new
+                {
+                    IsValid = true,
+                    AFETypesRecordDTL = AFETypesRecordDTL
+                });
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetTypesRecordDetails =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new
+            {
+                IsValid = false,
                 AFETypesRecordDTL = AFETypesRecordDTL
             });
         }
