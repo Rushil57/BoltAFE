@@ -174,11 +174,8 @@ namespace BoltAFE.Controllers
                 {
                     return JsonConvert.SerializeObject(new { IsValid = false, data = "Please select file.", folderPath = folderPath });
                 }
-                Random r = new Random();
-                int rInt = r.Next(0, 1000);
-                int fileID = afeHDRID > 0 ? afeHDRID : rInt;
                 path = AppDomain.CurrentDomain.BaseDirectory.ToString();
-                folderPath = @"Files\" + fileID + "_" + file.FileName;
+                folderPath = @"Files\" + file.FileName.Substring(0,file.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyyyMMddHHssfff") + file.FileName.Substring(file.FileName.LastIndexOf("."));
                 path += folderPath;
                 file.SaveAs(path);
                 createdFileID = _aFERepository.CreateFile(afeHDRID, docDiscription, "./" + folderPath.Replace(@"\", "/"));
