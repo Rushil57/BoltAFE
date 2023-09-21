@@ -251,7 +251,9 @@
                         <button type="button" class="btn btn-primary me-2 float-end" id="btnApprove">Approve</button>
                         <button type="button" class="btn btn-primary me-2 float-end" id="btnReturnTo">Return To</button>
                         <button type="button" class="btn btn-danger me-2 float-end" id="btnCancelPA" onclick="
-                                 deleteCancelAFEHDR(0, false)">Cancel</button>
+                                 deleteCancelAFEHDR(0, false)">
+                            Cancel
+                        </button>
                     </div>
                 </div>
 
@@ -316,6 +318,26 @@
     </div>
 </div>
 @*File Model End*@
+
+
+@*Load File Start*@
+<div class="modal fade bd-example-modal-xl" id="loadFileModel" tabindex="-1" aria-labelledby="loadFileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin-left:45%" id="loadFileLabel">File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="loadFileModelBody">
+                <iframe style="height:1000px;width:1100px" src="" id="loadFileIFream"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Load File End*@
 
 @section scripts {
     <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>

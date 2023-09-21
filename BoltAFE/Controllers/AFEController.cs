@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace BoltAFE.Controllers
 {
-    public class AFEController : Controller
+    public class AFEController : BaseController
     {
         private readonly IAFERepository _aFERepository;
         private readonly IUserMasterRepository _userMasterRepository;

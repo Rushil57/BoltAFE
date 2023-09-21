@@ -18,11 +18,11 @@ namespace BoltAFE.Helpers
                     filterContext.Result = new RedirectResult("~/Login");
                     return;
                 }
-                else if (!string.IsNullOrEmpty(Convert.ToString(session["RoleId"])) && Convert.ToInt32(session["RoleId"]) == 0 && (absolutePath.StartsWith("/usermaster") || absolutePath.StartsWith("/userdefinition") || absolutePath.StartsWith("/admin")))
-                {
-                    filterContext.Result = new RedirectResult("~/Dashboard");
-                    return;
-                }
+                //else if (!string.IsNullOrEmpty(Convert.ToString(session["RoleId"])) && Convert.ToInt32(session["RoleId"]) == 0 && (absolutePath.StartsWith("/usermaster") || absolutePath.StartsWith("/userdefinition") || absolutePath.StartsWith("/admin")))
+                //{
+                //    filterContext.Result = new RedirectResult("~/Dashboard");
+                //    return;
+                //}
                 else
                 {
                     if (Convert.ToBoolean(session["ResetPassword"]) && !absolutePath.StartsWith("/resetpassword"))

@@ -6,8 +6,7 @@ using System.Web.Mvc;
 
 namespace BoltAFE.Controllers
 {
-    [SessionTimeout]
-    public class ResetPasswordController : Controller
+    public class ResetPasswordController : BaseController
     {
         private IUserMasterRepository _userMasterRepository;
         public ResetPasswordController(IUserMasterRepository userMasterRepository)

@@ -305,13 +305,24 @@ function bindAFEDoc() {
         let currDocID = Number(userIDEle.val()) == userID ? docArr[i].Afe_doc_id : 0;
         let currentTrashIcon = Number(userIDEle.val()) == userID ? trashIcon : '';
         if (currDocPath != "") {
-            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td>' + eyeIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
+            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td onclick="openDoc(\'' + docArr[i].Doc_path.substring(1) + '\')">' + eyeIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
         }
     }
     let colorClass = tblDocDtlBodyEle.length % 2 == 0 ? 'evenRowBgColor' : 'oddRowBgColor';
     tblDocDtlBodyStr += '<tr style ="cursor: pointer"  onclick="openFilePopup()" id="trPlusRowDoc" class="' + colorClass + '"><td colspan="4">' + plusIcon + '</td></tr>';
     tblDocDtlBodyEle.html('');
     tblDocDtlBodyEle.html(tblDocDtlBodyStr);
+}
+
+function openDoc(filePath) {
+    let fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+    filePath = 'https://localhost:44320/' + filePath;
+    let currSrc = filePath;
+    if (fileExtension == "doc" || fileExtension == "docx" || fileExtension == "xls" || fileExtension == "xlsx" || fileExtension == "csv") {
+        currSrc = 'https://view.officeapps.live.com/op/embed.aspx?src=' + filePath;
+    }
+    openModel('loadFileModel');
+    $('#loadFileIFream').attr('src', currSrc);
 }
 function deleteDoc(docID) {
     if (docID > 0 && confirm('Are you sure do you want to delete this record?')) {
