@@ -49,7 +49,8 @@ var usersLabelEle = $('#usersLabel');
 
 var uploadedFileWithZero = [];
 var afeHDR = '';
-var afeHdrAprvlHistory = ''
+var afeHdrAprvlHistory = '';
+var loadFileIFreamEle = $('#loadFileIFream');
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -325,7 +326,12 @@ function openDoc(filePath) {
         currSrc = 'https://view.officeapps.live.com/op/embed.aspx?src=' + filePath;
     }
     openModel('loadFileModel');
-    $('#loadFileIFream').attr('src', currSrc);
+    loadFileIFreamEle.attr('src', currSrc);
+    setTimeout(function () {
+        if (fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png') {
+            loadFileIFreamEle.contents().find("img").attr('height', '60%').attr('width', '30%')
+        }
+    }, 500);
 }
 function deleteDoc(docID) {
     if (docID > 0 && confirm('Are you sure do you want to delete this record?')) {
