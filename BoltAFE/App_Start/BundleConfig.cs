@@ -21,7 +21,7 @@ namespace BoltAFE
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.bundle.min.js", "~/Scripts/bootstrap.bundle.min.js.map"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/Content/Css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/Css/Style.css"));
