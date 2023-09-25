@@ -1,5 +1,5 @@
 ﻿
-function deleteCancelAFEHDR(afeHDRID,isDelete) {
+function deleteCancelAFEHDR(afeHDRID,isDelete,isCreateEdit) {
     $.ajax({
         beforeSend: function () {
             AddLoader();
@@ -22,6 +22,9 @@ function deleteCancelAFEHDR(afeHDRID,isDelete) {
             if (isDelete) {
                 alert(data.data)
                 GetAllAFE();
+            }
+            else if (isCreateEdit) {
+                window.location.href = '/AFE/ApproveEditAFE';
             }
             else {
                 window.location.href = '/Dashboard';

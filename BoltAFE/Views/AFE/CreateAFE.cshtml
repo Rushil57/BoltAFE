@@ -5,14 +5,26 @@
 <link href="~/Content/Css/CreateAFE.css" rel="stylesheet" />
 
 
-
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <button onclick="backToPrevious()" type="button" id="btnBack" class="btn btn-primary float-end mt-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+            </svg>
+            Back
+        </button>
+    </div>
+</div>
 <div class="row" id="divCreateAFE">
     <div class="col-md-12">
         <div class="border border-color mt-2 min-vh-90">
+
             <div class="row">
                 <input type="hidden" value="@ViewBag.AfeHDRID" id="afeHDRID" />
                 <input type="hidden" value="@ViewBag.AfeDTLID" id="afeDTLID" />
                 <div class="col-md-6  table-responsive tableFixHead">
+
                     <table class="table  " id="tblAFEDtl">
                         <thead style="background-color: #4472c4; color: white; ">
                         </thead>
@@ -251,7 +263,7 @@
                         <button type="button" class="btn btn-primary me-2 float-end" id="btnApprove">Approve</button>
                         <button type="button" class="btn btn-primary me-2 float-end" id="btnReturnTo">Return To</button>
                         <button type="button" class="btn btn-danger me-2 float-end" id="btnCancelPA" onclick="
-                                 deleteCancelAFEHDR(0, false)">
+                                 deleteCancelAFEHDR(0, false,true)">
                             Cancel
                         </button>
                     </div>

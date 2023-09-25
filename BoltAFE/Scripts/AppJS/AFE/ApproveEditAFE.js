@@ -1,11 +1,14 @@
 ﻿var afeHdrs = [];
 var tblAFEDtlBodyEle = $('#tblAFEDtl >  tbody');
 var table = '';
+
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuApproveEditAFE').text());
     GetAllAFE();
 });
-
+function backToPrevious() {
+    window.location.href = '/Dashboard';
+}
 
 
 function GetAllAFE() {
@@ -52,7 +55,7 @@ function GetAllAFE() {
                 let afeUserInbox = userEmail;
                 let currentTrashIcon = Number(userIDEle.val()) == cretaedBy ? trashIcon : '';
 
-                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID + '\'">' + pencilIcon + '</td><td onclick="deleteAfeHDR('+ afeHDRID +')">' + currentTrashIcon + '</td></tr>';
+                afeHdrsStr += '<tr><td><input type="hidden" value="' + afeHDRID + '">' + createdDate + '</td><td>' + cretaedByEmail + '</td><td>' + afeName + '</td><td>' + afeType + '</td><td>' + afeCategory + '</td><td>' + afeDesc + '</td><td>' + afeGrossAmount + '</td><td>' + afeNetAmount + '</td><td>' + afePV10 + '</td><td>' + afeROR + '</td><td>' + afeUserInbox + '</td><td onclick="window.location = \'/AFE/CreateAFE?afeHDR=' + afeHDRID + '\'">' + pencilIcon + '</td><td onclick="deleteAfeHDR(' + afeHDRID + ')">' + currentTrashIcon + '</td></tr>';
             }
             tblAFEDtlBodyEle.html('');
             tblAFEDtlBodyEle.html(afeHdrsStr);

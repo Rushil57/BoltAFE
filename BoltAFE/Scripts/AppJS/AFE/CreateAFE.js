@@ -51,6 +51,7 @@ var uploadedFileWithZero = [];
 var afeHDR = '';
 var afeHdrAprvlHistory = '';
 var loadFileIFreamEle = $('#loadFileIFream');
+var afeListBack = false;
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -58,15 +59,24 @@ $(document).ready(function () {
     bindAFEComment();
     getDocuments();
     if (Number(afeHDRIDEle.val()) == 0) {
-        $('#createAFEBtn').prop('hidden', false)
+        $('#createAFEBtn').prop('hidden', false);
     }
     else {
         getComments();
         GetAFE();
-        $('#tblPrevAppDiv').prop('hidden', false)
+        $('#tblPrevAppDiv').prop('hidden', false);
+         afeListBack = true;
     }
 });
 
+function backToPrevious() {
+    if (!afeListBack) {
+        window.location.href = '/Dashboard';
+    }
+    else {
+        window.location.href = '/AFE/ApproveEditAFE';
+    }
+}
 
 function GetAFE() {
     $.ajax({
@@ -620,6 +630,9 @@ function saveHDRAndDTL(isSubmitTo) {
                     if (data.IsValid) {
                         if (isApprovedAFE) {
                             approveAFE()
+                        }
+                        else if (isApproveAFE) {
+                            window.location.href = '/AFE/ApproveEditAFE';
                         }
                         else {
                             window.location.href = '/Dashboard'
