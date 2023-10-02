@@ -3,6 +3,7 @@ using BoltAFE.Helpers;
 using BoltAFE.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Web;
 
@@ -10,26 +11,19 @@ namespace BoltAFE.Repositories.UserMaster
 {
     public class UserMasterRepository : IUserMasterRepository
     {
-        public CommonResponseModel<bool> AddNewUser(string userName)
+        public CommonResponseModel<bool> AddNewUser(string userName, string cardMemberName,decimal approverVal,int roleID)
         {
             CommonResponseModel<bool> responseModel = new CommonResponseModel<bool>();
             try
             {
                 string password = Helper.RandomString(10);
                 password = Helper.EncryptString(password);
-                var id = CommonDatabaseOperationHelper.InsertUpdateDeleteWithScalar($"INSERT INTO USERS(USER_EMAIL) OUTPUT INSERTED.User_ID VALUES(@UserName)", new { @UserName = userName });
-
-                var currentInstance = HttpContext.Current.Session["instance_name"].ToString();
-                var query = $"INSERT INTO MASTER_USER (user_email, instance_name, inserted_on) VALUES (@UserName,@CurrentInstance,GETDATE())";
-                CommonDatabaseOperationHelper.InsertUpdateDelete_Master(query, new { @UserName = userName, @CurrentInstance = currentInstance });
-                responseModel.Data = false;
-
-                string query1 = $"SELECT u.User_ID,u.Password FROM UserDetail u WHERE u.user_email=@UserName ORDER BY u.id";
+                string query1 = $"SELECT u.User_ID,u.Password FROM UserDetail u WHERE u.user_email=@UserName ORDER BY u.User_ID";
                 DataTable dt = CommonDatabaseOperationHelper.Get_Master(query1, new { @UserName = userName });
                 if (dt.Rows.Count == 0)
                 {
-                    var query2 = $"INSERT INTO UserDetail (user_email, password,reset_password) VALUES (@UserName,@Password,1)";
-                    CommonDatabaseOperationHelper.InsertUpdateDelete_Master(query2, new { @UserName = userName, @Password = password });
+                    var query2 = $"INSERT INTO UserDetail (user_email, password,reset_password,User_Name,RoleID,Approver_amount) VALUES (@UserName,@Password,1,@cardMemberName,@roleID,@ApproverAmount)";
+                    CommonDatabaseOperationHelper.InsertUpdateDelete_Master(query2, new { @UserName = userName, @Password = password, @cardMemberName = cardMemberName, @roleID = roleID, @ApproverAmount = approverVal });
                     responseModel.Data = true;
                 }
                 responseModel.Status = true;
@@ -80,7 +74,7 @@ namespace BoltAFE.Repositories.UserMaster
             {
                 string password = Helper.RandomString(10);
                 password = Helper.EncryptString(password);
-                var query2 = $"INSERT INTO UserDetail (user_email, password,reset_password) VALUES (@UserName,@Password,1)";
+                var query2 = $"INSERT INTO UserDetail (user_email, password,reset_password) VALUES (@UserName,@Password,1);";
                 CommonDatabaseOperationHelper.InsertUpdateDelete_Master(query2, new { @UserName = userEmail, @Password = password });
                 responseModel.Status = true;
                 responseModel.Data = Helper.DecryptString(password);
@@ -161,7 +155,7 @@ namespace BoltAFE.Repositories.UserMaster
         {
             try
             {
-                string query = $"SELECT * FROM UserDetail";
+                string query = $"SELECT  ud.*,r.RoleName as role FROM UserDetail ud  left join Roles r on ud.RoleID = r.roleID";
                 DataTable dt = CommonDatabaseOperationHelper.Get(query);
                 return JsonConvert.SerializeObject(dt);
             }
@@ -171,19 +165,29 @@ namespace BoltAFE.Repositories.UserMaster
             }
         }
 
+        public string GetAllRoles()
+        {
+            try
+            {
+                string query = $"SELECT * FROM [Roles] order by RoleName desc";
+                DataTable dt = CommonDatabaseOperationHelper.Get(query);
+                return JsonConvert.SerializeObject(dt);
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("GetAllRoles =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
+
         public bool DeleteUser(int id)
         {
             try
             {
-                var query = $"select USER_EMAIL from USERS where ID=@Id";
+                var query = $"select USER_EMAIL from UserDetail where User_ID=@Id";
                 var deleteEmail = CommonDatabaseOperationHelper.Scalar(query, new { @Id = id });
-                var currentInstance = HttpContext.Current.Session["instance_name"].ToString();
-                query = $"DELETE FROM MASTER_USER where user_email= @DeleteEmail and instance_name= @CurrentInstance";
-                CommonDatabaseOperationHelper.InsertUpdateDelete_Master(query, new { @DeleteEmail = deleteEmail, @CurrentInstance = currentInstance });
-
-                query = $"DELETE FROM [USER_RELATION] WHERE [PARENT_USER_ID] = @Id OR [CHILD_USER_ID] = @Id; ";
-                query += $"DELETE FROM USERROLES WHERE USER_ID = @Id; ";
-                query += $"DELETE FROM USERS WHERE ID = @Id; ";
+                
+                query = $"DELETE FROM UserDetail WHERE User_ID = @Id; ";
                 CommonDatabaseOperationHelper.InsertUpdateDelete(query, new { @Id = id });
 
                 return true;
@@ -192,6 +196,29 @@ namespace BoltAFE.Repositories.UserMaster
             {
                 return false;
             }
+        }
+
+        public bool UpdateUserNames(string userNameArr)
+        {
+            var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
+            try
+            {
+                string query = string.Empty;
+                int updated = 0;
+                var users = JsonConvert.DeserializeObject<List<UserMasterModel>>(userNameArr);
+                for (int i = 0; i < users.Count; i++)
+                {
+                    query += $"Update [UserDetail] set User_Name = '{users[i].UserName}' ,  Approver_amount ={users[i].Approver}, RoleID = {users[i].RoleID} where User_email = '{users[i].UserEmail}';";
+                }
+                updated = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return updated > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("UpdateUserNames =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+            finally { connection.Close(); }
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Admin";
+    var versionUpdate = System.Configuration.ConfigurationManager.AppSettings["versionKey"];
+}
+<link href="~/Content/Css/Admin.css" rel="stylesheet" />
+
+<button onclick="window.location.href='/UserMaster/Index'" class="btn buttonStyle" style="background-color: #BDD7EE">
+    Users
+</button>
+
+<button onclick="window.location.href = '/Admin'" class="btn buttonStyle" style="background-color: #B4C7E7">
+    Create/Edit Categories
+</button>
+<button onclick="window.location.href = '/Admin'" class="btn buttonStyle" style="background-color: #8FAADC">
+    Create/Edit Types
+</button>
+
+@section scripts {
+    <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>
+    <script src="~/Scripts/AppJs/Admin/Admin.js?v=@versionUpdate"></script>
+}

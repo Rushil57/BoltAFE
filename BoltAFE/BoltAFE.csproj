@@ -136,11 +136,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AFEController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ResetPasswordController.cs" />
+    <Compile Include="Controllers\UserMasterController.cs" />
     <Compile Include="Domain\Admin\IAdminRepository.cs" />
     <Compile Include="Domain\AFE\IAFERepository.cs" />
     <Compile Include="Domain\Login\ILoginRepository.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Models\AfeEconDTLModel.cs" />
     <Compile Include="Models\AfeHDRModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
+    <Compile Include="Models\UserMasterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Admin\AdminRepository.cs" />
     <Compile Include="Repositories\AFE\AFERepository.cs" />
@@ -179,18 +182,23 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Css\Admin.css" />
     <Content Include="Content\Css\ApproveEditAFE.css" />
     <Content Include="Content\Css\CreateAFE.css" />
     <Content Include="Content\Css\Dashboard.css" />
     <Content Include="Content\Css\LoginIndex.css" />
     <Content Include="Content\Css\ResetPassword.css" />
     <Content Include="Content\Css\Style.css" />
+    <Content Include="Content\Css\UserMaster.css" />
+    <Content Include="Content\Images\BoltAfeLogo.png" />
     <Content Include="DBScript\BoltAFE.sql" />
     <Content Include="Docs\BOLTAFE.accdb" />
     <Content Include="favicon.ico" />
     <Content Include="Files\Sample.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\AppJS\Admin\Admin.js" />
+    <Content Include="Scripts\AppJS\UserMaster\UserMaster.js" />
     <Content Include="Scripts\AppJS\AFE\ApproveEditAFE.js" />
     <Content Include="Scripts\AppJS\AFE\Common.js" />
     <Content Include="Scripts\AppJS\AFE\CreateAFE.js" />
@@ -240,10 +248,12 @@
     <Content Include="Views\ResetPassword\Index.cshtml" />
     <Content Include="Views\AFE\CreateAFE.cshtml" />
     <Content Include="Views\AFE\ApproveEditAFE.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\UserMaster\_AddNewUser.cshtml" />
+    <Content Include="Views\UserMaster\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

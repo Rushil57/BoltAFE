@@ -18,12 +18,15 @@
                 <form>
                     <div class="row">
                         <div class="col-md-12">
-                            <h6>BoltAFE</h6>
+                            <h6>
+                                Bolt AFE<br />
+                                Repairs and Opportunities
+                            </h6>
                             <div class="col-md-12">
                                 @Html.TextBox("txtRequestAccessEmail", "", new { @name = "txtRequestAccessEmail", @id = "txtRequestAccessEmail", @placeholder = "Email" })
 
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-2">
                                 @Html.Password("txtRequestAccessPassword", "", new { @name = "txtRequestAccessPassword", @id = "txtRequestAccessPassword", @placeholder = "Password" })
                             </div>
                             <div class="col-md-12">
@@ -37,8 +40,8 @@
                     </div>
                 </form>
             </div>
-            <div class="col-5">
-                <img src="../Content/Img/user.png" alt="user">
+            <div class="col-5 login-imageDiv">
+                <img src="../Content/Images/BoltAfeLogo.png" alt="user">
             </div>
         </div>
     </div>

@@ -76,3 +76,7 @@ function closeModel(modalId) {
 function openModel(modalId) {
     $('#' + modalId).modal('show');
 }
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}

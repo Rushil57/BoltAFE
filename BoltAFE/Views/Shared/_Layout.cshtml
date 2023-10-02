@@ -39,20 +39,20 @@
                                         Approve/Edit AFE
                                     </a>
                                 </li>
-                                @*@if (HttpContext.Current.Session["RoleId"] != null && Convert.ToInt32(HttpContext.Current.Session["RoleId"]) == 1)
-                                    {
-                                        <li><a class="dropdown-item" id="menuUserMaster" href="@Url.Action("Index", "UserMaster")">User Master</a></li>
+                                @if (HttpContext.Current.Session["RoleId"] != null && Convert.ToInt32(HttpContext.Current.Session["RoleId"]) == 1)
+                                {
+                                    @*<li><a class="dropdown-item" id="menuUserMaster" href="@Url.Action("Index", "UserMaster")">User Master</a></li>
                                         <li>
                                             <a class="dropdown-item" id="menuUserDefinition" href="@Url.Action("Index", "UserDefinition")">
                                                 Approver Permissions
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="menuAdmin" href="@Url.Action("Index", "Admin")">
-                                                Admin
-                                            </a>
-                                        </li>
-                                    }*@
+                                        </li>*@
+                                    <li>
+                                        <a class="dropdown-item" id="menuAdmin" href="@Url.Action("Index", "Admin")">
+                                            Admin
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </li>
                     </ul>

@@ -35,7 +35,7 @@ namespace BoltAFE.Controllers
                     var res = result[0];
                     session["Email"] = email;
                     session["UserId"] = res.id;
-                    session["RoleId"] = 1;
+                    session["RoleId"] = res.RoleID;
                     session["ResetPassword"] = result[0].ResetPassword;
                     session["Password"] = result[0].Password;
                     session["Approver_amount"] = result[0].Approver_amount;
