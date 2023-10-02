@@ -3,6 +3,10 @@ using System.Net.Mail;
 using System.Net;
 using System.Web.Configuration;
 using System;
+using BoltAFE.Helpers;
+using BoltAFE.Models;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BoltAFE.Repositories.Admin
 {
@@ -54,5 +58,62 @@ namespace BoltAFE.Repositories.Admin
             }
             return result;
         }
+
+        #region Category
+
+        public bool SaveCategory(string categoryName)
+        {
+            string query = string.Empty;
+            try
+            {
+                query = $"IF NOT EXISTS (SELECT * FROM [Afe_category] where Category = '{categoryName}') BEGIN INSERT INTO[Afe_category] VALUES('{categoryName}')  END";
+                int inserted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" SaveCategory =>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
+            }
+        }
+
+        public bool DeleteCategory(int categoryID)
+        {
+            string query = string.Empty;
+            try
+            {
+                query = $"DELETE FROM [Afe_category] WHERE Afe_category_id = {categoryID}";
+                int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" DeleteCategory  =>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
+            }
+        }
+
+        public bool UpdateCategory(string categoryArr)
+        {
+            try
+            {
+                string query = string.Empty;
+                int updated = 0;
+                var category = JsonConvert.DeserializeObject<List<CategoryModel>>(categoryArr);
+                for (int i = 0; i < category.Count; i++)
+                {
+                    query += $"IF NOT EXISTS (SELECT * FROM [Afe_category] where Category = '{category[i].Category}') BEGIN UPDATE [Afe_category] SET [Category] = '{category[i].Category}' WHERE Afe_category_id ={category[i].Afe_category_id} END;";
+                }
+                updated = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return updated > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("UpdateCategory =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

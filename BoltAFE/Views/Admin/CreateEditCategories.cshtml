@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Create Edit Categories";
+    var versionUpdate = System.Configuration.ConfigurationManager.AppSettings["versionKey"];
+}
+
+<link href="~/Content/Css/CreateEditCategories.css" rel="stylesheet" />
+
+<div class="row" id="divCECat">
+    <div class="col-md-9">
+        <table class="table min-vh-80  overflow-auto" id="tblTypes">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Code</th>
+                    <th>Gross AFE</th>
+                    <th>WI</th>
+                    <th>NRI</th>
+                    <th>ROY</th>
+                    <th>Net AFE</th>
+                    <th>Oil</th>
+                    <th>Gas</th>
+                    <th>NGL</th>
+                    <th>BOE</th>
+                    <th>PO</th>
+                    <th>ROR</th>
+                    <th>MROI</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button class="btn btn-primary float-start">Add</button>
+        <button class="btn btn-primary float-end">Update</button>
+    </div>
+    <div class="col-md-3">
+        <table class="table table-borderless" id="tblCategory">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button class="btn btn-primary float-start" onclick="addCategory()">Add</button>
+        <button class="btn btn-primary float-end" onclick="updateCategory()">Update</button>
+    </div>
+</div>
+@*Category Start*@
+<div class="modal fade" id="categoryModel" tabindex="-1" aria-labelledby="categoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" style="margin-left:40%" id="categoryLabel">
+                    Add Category</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="categoryModelBody">
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Category: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" id="txtCategory" />
+                        <span class="d-none text-danger" id="spanCatVal">This field is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCategory()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Category End*@
+
+@section scripts {
+    <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>
+    <script src="~/Scripts/AppJs/Admin/CreateEditCategories.js?v=@versionUpdate"></script>
+}

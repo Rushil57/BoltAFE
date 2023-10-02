@@ -157,6 +157,7 @@
     <Compile Include="Models\AfeApprovalHistoryModel.cs" />
     <Compile Include="Models\AfeEconDTLModel.cs" />
     <Compile Include="Models\AfeHDRModel.cs" />
+    <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\UserMasterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -185,6 +186,7 @@
     <Content Include="Content\Css\Admin.css" />
     <Content Include="Content\Css\ApproveEditAFE.css" />
     <Content Include="Content\Css\CreateAFE.css" />
+    <Content Include="Content\Css\CreateEditCategories.css" />
     <Content Include="Content\Css\Dashboard.css" />
     <Content Include="Content\Css\LoginIndex.css" />
     <Content Include="Content\Css\ResetPassword.css" />
@@ -198,6 +200,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\AppJS\Admin\Admin.js" />
+    <Content Include="Scripts\AppJS\Admin\CreateEditCategories.js" />
     <Content Include="Scripts\AppJS\UserMaster\UserMaster.js" />
     <Content Include="Scripts\AppJS\AFE\ApproveEditAFE.js" />
     <Content Include="Scripts\AppJS\AFE\Common.js" />
@@ -251,6 +254,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\UserMaster\_AddNewUser.cshtml" />
     <Content Include="Views\UserMaster\Index.cshtml" />
+    <Content Include="Views\Admin\CreateEditCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

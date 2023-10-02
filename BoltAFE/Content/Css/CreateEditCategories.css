@@ -1,0 +1,28 @@
+﻿body {
+}
+
+thead {
+    background-color: #4472c4;
+    color: white;
+}
+
+.form-control {
+    display: inline !important;
+    padding: 0rem 0.75rem !important;
+    font-size: 0.8rem !important;
+}
+
+
+tbody {
+    display: block;
+    min-height: 75vh !important;
+    height: 75vh !important;
+    overflow: auto;
+}
+    thead, tbody tr {
+        display: table;
+        table-layout: fixed;
+    }
+thead {
+    width: calc( 100% - 1em ) 
+}
