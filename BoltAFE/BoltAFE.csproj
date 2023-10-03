@@ -218,6 +218,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Docs\BOLTAFE.pptx" />
     <Content Include="libman.json" />
+    <Content Include="Docs\BoltAfe_AdminScreens.pptx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Datatable\Datatable.css" />
     <Content Include="Scripts\Datatable\Datatable.js" />

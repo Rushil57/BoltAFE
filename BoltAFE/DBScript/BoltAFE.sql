@@ -6,7 +6,7 @@ CREATE DATABASE [BoltAFE]
 
 USE [BoltAFE]
 GO
-/****** Object:  Table [dbo].[Afe_aprvl_hist_dtl]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_aprvl_hist_dtl]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Afe_aprvl_hist_dtl](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_category]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_category]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -36,7 +36,7 @@ CREATE TABLE [dbo].[Afe_category](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_comments]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_comments]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,7 +53,7 @@ CREATE TABLE [dbo].[Afe_comments](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_docs]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_docs]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,7 +72,7 @@ CREATE TABLE [dbo].[Afe_docs](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_econ_dtl]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_econ_dtl]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -103,7 +103,7 @@ CREATE TABLE [dbo].[Afe_econ_dtl](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_hdr]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_hdr]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -127,7 +127,7 @@ CREATE TABLE [dbo].[Afe_hdr](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Afe_type]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Afe_type]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -150,13 +150,28 @@ CREATE TABLE [dbo].[Afe_type](
 	[Include_ror] [bit] NULL,
 	[Include_mroi] [bit] NULL,
 	[Afe_num_code] [nvarchar](50) NULL,
+	[CategoryID] [int] NULL,
  CONSTRAINT [PK_Afe_type] PRIMARY KEY CLUSTERED 
 (
 	[Afe_type_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransactionLog]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 03-10-2023 04:04:18 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[RoleID] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED 
+(
+	[RoleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TransactionLog]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -167,7 +182,7 @@ CREATE TABLE [dbo].[TransactionLog](
 	[Note] [varchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserDetail]    Script Date: 21-09-2023 10:39:24 AM ******/
+/****** Object:  Table [dbo].[UserDetail]    Script Date: 03-10-2023 04:04:18 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -178,6 +193,8 @@ CREATE TABLE [dbo].[UserDetail](
 	[Password] [nvarchar](500) NOT NULL,
 	[Reset_password] [bit] NOT NULL,
 	[Approver_amount] [decimal](18, 2) NULL,
+	[RoleID] [int] NOT NULL,
+	[User_Name] [nvarchar](255) NULL,
  CONSTRAINT [PK_UserDetail] PRIMARY KEY CLUSTERED 
 (
 	[User_ID] ASC
@@ -226,6 +243,8 @@ ALTER TABLE [dbo].[UserDetail] ADD  CONSTRAINT [DF_UserDetail_Reset_password]  D
 GO
 ALTER TABLE [dbo].[UserDetail] ADD  CONSTRAINT [DF_UserDetail_Approver_amount]  DEFAULT ((0)) FOR [Approver_amount]
 GO
+ALTER TABLE [dbo].[UserDetail] ADD  CONSTRAINT [DF_UserDetail_RoleID]  DEFAULT ((2)) FOR [RoleID]
+GO
 ALTER TABLE [dbo].[Afe_aprvl_hist_dtl]  WITH CHECK ADD  CONSTRAINT [FK_Afe_aprvl_hist_dtl_Afe_hdr] FOREIGN KEY([Afe_hdr_id])
 REFERENCES [dbo].[Afe_hdr] ([Afe_hdr_id])
 GO
@@ -266,7 +285,29 @@ REFERENCES [dbo].[Afe_type] ([Afe_type_id])
 GO
 ALTER TABLE [dbo].[Afe_hdr] CHECK CONSTRAINT [FK_Afe_hdr_Afe_type]
 GO
+ALTER TABLE [dbo].[Afe_type]  WITH CHECK ADD  CONSTRAINT [FK_Afe_type_Afe_category] FOREIGN KEY([CategoryID])
+REFERENCES [dbo].[Afe_category] ([Afe_category_id])
+GO
+ALTER TABLE [dbo].[Afe_type] CHECK CONSTRAINT [FK_Afe_type_Afe_category]
+GO
+ALTER TABLE [dbo].[UserDetail]  WITH CHECK ADD  CONSTRAINT [FK_UserDetail_Roles] FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[UserDetail] CHECK CONSTRAINT [FK_UserDetail_Roles]
+GO
 USE [master]
 GO
 ALTER DATABASE [BoltAFE] SET  READ_WRITE 
+GO
+
+
+USE [BoltAFE]
+GO
+SET IDENTITY_INSERT [dbo].[Roles] ON 
+GO
+INSERT [dbo].[Roles] ([RoleID], [RoleName]) VALUES (1, N'Admin')
+GO
+INSERT [dbo].[Roles] ([RoleID], [RoleName]) VALUES (2, N'User')
+GO
+SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
