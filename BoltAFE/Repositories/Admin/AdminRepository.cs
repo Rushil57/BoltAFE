@@ -82,7 +82,7 @@ namespace BoltAFE.Repositories.Admin
             string query = string.Empty;
             try
             {
-                query = $"DELETE FROM [Afe_category] WHERE Afe_category_id = {categoryID}";
+                query = $"Update Afe_hdr set [Afe_type_id] = NULL where Afe_type_id in(SeLect Afe_type_id FROM [Afe_type] WHERE [CategoryID] =  {categoryID}); DELETE FROM [Afe_type] WHERE [CategoryID] = {categoryID} ;  Update Afe_hdr set Afe_category_id = NULL where Afe_category_id = {categoryID}; DELETE FROM [Afe_category] WHERE Afe_category_id = {categoryID}";
                 int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
                 return true;
             }
@@ -141,7 +141,7 @@ namespace BoltAFE.Repositories.Admin
             string query = string.Empty;
             try
             {
-                query = $"DELETE FROM [Afe_type] WHERE Afe_type_id = {typeID}";
+                query = $"Update Afe_hdr set [Afe_type_id] = NULL where Afe_type_id = {typeID}; DELETE FROM [Afe_type] WHERE Afe_type_id = {typeID}";
                 int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
                 return true;
             }
