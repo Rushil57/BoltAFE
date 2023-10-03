@@ -10,5 +10,12 @@
 
         bool UpdateCategory(string categoryArr);
         #endregion
+
+        #region Types
+        bool SaveType(string typeStr);
+        bool DeleteType(int typeID);
+
+        bool UpdateTypes(string typesArr);
+        #endregion
     }
 }

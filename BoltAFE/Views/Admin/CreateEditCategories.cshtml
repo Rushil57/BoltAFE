@@ -5,35 +5,45 @@
 }
 
 <link href="~/Content/Css/CreateEditCategories.css" rel="stylesheet" />
-
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <button onclick="window.location.href='/Admin'" type="button" id="btnBack" class="btn btn-primary float-end mt-1 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+            </svg>
+            Back
+        </button>
+    </div>
+</div>
 <div class="row" id="divCECat">
     <div class="col-md-9">
-        <table class="table min-vh-80  overflow-auto" id="tblTypes">
+        <table class="table table-borderless" id="tblTypes">
             <thead>
                 <tr>
                     <th>Category</th>
                     <th>Type</th>
                     <th>Code</th>
-                    <th>Gross AFE</th>
-                    <th>WI</th>
-                    <th>NRI</th>
-                    <th>ROY</th>
-                    <th>Net AFE</th>
-                    <th>Oil</th>
-                    <th>Gas</th>
-                    <th>NGL</th>
-                    <th>BOE</th>
-                    <th>PO</th>
-                    <th>ROR</th>
-                    <th>MROI</th>
-                    <th></th>
+                    <th class="cls-afeFieldTh">Gross AFE</th>
+                    <th class="cls-afeFieldTh">WI</th>
+                    <th class="cls-afeFieldTh">NRI</th>
+                    <th class="cls-afeFieldTh">ROY</th>
+                    <th class="cls-afeFieldTh">Net AFE</th>
+                    <th class="cls-afeFieldTh">Oil</th>
+                    <th class="cls-afeFieldTh">Gas</th>
+                    <th class="cls-afeFieldTh">NGL</th>
+                    <th class="cls-afeFieldTh">BOE</th>
+                    <th class="cls-afeFieldTh">PO</th>
+                    <th class="cls-afeFieldTh">ROR</th>
+                    <th class="cls-afeFieldTh">MROI</th>
+                    <th class="cls-afeFieldTh"></th>
                 </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
-        <button class="btn btn-primary float-start">Add</button>
-        <button class="btn btn-primary float-end">Update</button>
+        <button class="btn btn-primary float-start" onclick="addType()">Add</button>
+        <button class="btn btn-primary float-end" onclick="updateTypes()">Update</button>
     </div>
     <div class="col-md-3">
         <table class="table table-borderless" id="tblCategory">
@@ -46,8 +56,8 @@
             <tbody>
             </tbody>
         </table>
-        <button class="btn btn-primary float-start" onclick="addCategory()">Add</button>
-        <button class="btn btn-primary float-end" onclick="updateCategory()">Update</button>
+        <button class="btn btn-primary float-start mt-3" onclick="addCategory()">Add</button>
+        <button class="btn btn-primary float-end mt-3" onclick="updateCategory()">Update</button>
     </div>
 </div>
 @*Category Start*@
@@ -56,7 +66,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" style="margin-left:40%" id="categoryLabel">
-                    Add Category</h6>
+                    Add Category
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="categoryModelBody">
@@ -78,6 +89,153 @@
     </div>
 </div>
 @*Category End*@
+
+
+@*Type Start*@
+<div class="modal fade" id="typeModel" tabindex="-1" aria-labelledby="typeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" style="margin-left:40%" id="typeLabel">
+                    Add Type
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="typeModelBody">
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Category: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-select" id="mainAddTypeCategory"></select>
+                        <span class="d-none text-danger" id="spanTypeCategory">This field is required.</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Type: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" id="type" class="form-control" />
+                        <span class="d-none text-danger" id="spanType">This field is required.</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Code: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" id="code" class="form-control" />
+                        <span class="d-none text-danger" id="spanCode">This field is required.</span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Gross AFE ($): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="grossAfeChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Working Interest (%): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="wiChk" class="form-check" />
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label> Net Revenue Interest (%): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="nriChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Royalty (%): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="royChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Net AFE ($): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="netAfeChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Gross Oil (MBO):</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="oilChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Gross Gas (MMCF): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="gasChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Gross NGL (MBO): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="nglChk" class="form-check" />
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label> Gross BOE (MBO): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="boeChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Payout (yrs): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="poChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>  Rate of Return (%): </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="rorChk" class="form-check" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>MROI: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="checkbox" id="mroiChk" class="form-check" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveType()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Type End*@
 
 @section scripts {
     <script src="~/Scripts/AppJs/Common/Common.js?v=@versionUpdate"></script>

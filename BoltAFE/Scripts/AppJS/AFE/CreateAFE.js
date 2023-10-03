@@ -227,23 +227,16 @@ function GetAFETypesAndCategories() {
             }
             afeTypes = JSON.parse(data.AFETypes);
             afeCategories = JSON.parse(data.AFECategories);
-            let afeTypesStr = '<option value="0">-- Select --</option>';
+            
             let afeCategoriesStr = '<option value="0">-- Select --</option>';
 
-            for (var i = 0; i < afeTypes.length; i++) {
-                let id = afeTypes[i].Afe_type_id;
-                let type = isNullEmpty(afeTypes[i].Type) ? "" : afeTypes[i].Type;
-                afeTypesStr += '<option value="' + id + '">' + type + '</option>';
-            }
+           
             for (var i = 0; i < afeCategories.length; i++) {
                 let id = afeCategories[i].Afe_category_id;
                 let category = isNullEmpty(afeCategories[i].Category) ? "" : afeCategories[i].Category;
                 afeCategoriesStr += '<option value="' + id + '">' + category + '</option>';
             }
-            afeTypeSelectEle.html('');
             afeCatSelectEle.html('');
-
-            afeTypeSelectEle.html(afeTypesStr);
             afeCatSelectEle.html(afeCategoriesStr);
         },
         error: function (err) {
@@ -252,7 +245,19 @@ function GetAFETypesAndCategories() {
     });
     GetTypesRecordDetails();
 }
-
+afeCatSelectEle.change(function () {
+    txtAFENumEle.val('');
+    let afeTypesStr = '<option value="0">-- Select --</option>';
+    let currCategoryID = Number($(this).val());
+    let currentAfeType = afeTypes.filter(x => x.CategoryID == currCategoryID);
+    for (var i = 0; i < currentAfeType.length; i++) {
+        let id = currentAfeType[i].Afe_type_id;
+        let type = isNullEmpty(currentAfeType[i].Type) ? "" : currentAfeType[i].Type;
+        afeTypesStr += '<option value="' + id + '">' + type + '</option>';
+    }
+    afeTypeSelectEle.html('');
+    afeTypeSelectEle.html(afeTypesStr);
+})
 function GetTypesRecordDetails() {
     let currDate = txtAfeDateEle.val();
     let currMonth = new Date().getMonth() + 1;

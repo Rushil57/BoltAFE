@@ -93,5 +93,76 @@ namespace BoltAFE.Controllers
             return JsonConvert.SerializeObject(new { IsValid = isValid, Message = message });
         }
         #endregion
+
+
+        #region Types
+        public string SaveType(string type)
+        {
+            string data = "Issue occured when try to save type.";
+            bool isValid = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(type))
+                {
+                    _adminRepository.SaveType(type);
+                    isValid = true;
+                    data = "Type saved successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                isValid = false;
+                CommonDatabaseOperationHelper.Log("SaveType =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new
+            {
+                IsValid = isValid,
+                data = data
+            });
+        }
+        public string DeleteType(int typeID)
+        {
+            string data = "Issue occured when try to delete type.";
+            bool isValid = false;
+            try
+            {
+                if (typeID > 0)
+                {
+                    _adminRepository.DeleteType(typeID);
+                    isValid = true;
+                    data = "Type deleted successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                isValid = false;
+                CommonDatabaseOperationHelper.Log("DeleteType =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new
+            {
+                IsValid = isValid,
+                data = data
+            });
+        }
+        public string UpdateTypes(string typesArr)
+        {
+            bool isValid = false;
+            string message = "Issue occured when try to update types.";
+            try
+            {
+                if (!string.IsNullOrEmpty(typesArr))
+                {
+                    var result = _adminRepository.UpdateTypes(typesArr);
+                    isValid = true;
+                    message = "Types updated successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("UpdateTypes =>", ex.Message + "==>" + ex.StackTrace, true);
+            }
+            return JsonConvert.SerializeObject(new { IsValid = isValid, Message = message });
+        }
+        #endregion
     }
 }

@@ -2,25 +2,6 @@
     height: 100%;
 }
 
-#user-master .all-users-list ul {
-    border-color: #000;
-    border-style: groove;
-    border-width: thin;
-    margin: 10px;
-    height: 500px;
-    padding: 20px;
-    position: relative;
-}
-
-    #user-master .all-users-list ul li {
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-    }
-
-        #user-master .all-users-list ul li:last-child {
-            margin-bottom: 0;
-        }
 
 #user-master .all-users-list li {
     color: #000;
@@ -51,10 +32,10 @@
     border-style: groove;
     border-width: thin;
     margin: 10px;
-    height: 500px;
+    height: 400px;
     padding: 20px;
     position: relative;
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: scroll;
 }
 

@@ -114,6 +114,64 @@ namespace BoltAFE.Repositories.Admin
             }
         }
 
+
+        #endregion
+
+        #region Types
+
+        public bool SaveType(string typeStr)
+        {
+            string query = string.Empty;
+            try
+            {
+                var type = JsonConvert.DeserializeObject<TypeModel>(typeStr);
+                query = $"INSERT INTO [Afe_type]([Type],[Include_gross_afe],[Include_wi],[Include_nri],[Include_roy],[Include_net_afe],[Include_oil],[Include_gas],[Include_ngl],[Include_boe],[Include_po],[Include_pv10],[Include_f_and_d],[Include_ror],[Include_mroi],[Afe_num_code],[CategoryID]) VALUES ('{type.Type}',{type.Include_gross_afe},{type.Include_wi},{type.Include_nri},{type.Include_roy},{type.Include_net_afe},{type.Include_oil},{type.Include_gas},{type.Include_ngl},{type.Include_boe},{type.Include_po},{type.Include_pv10},{type.Include_f_and_d},{type.Include_ror},{type.Include_mroi},'{type.Afe_num_code}',{type.CategoryID})";
+                int inserted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" SaveType =>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
+            }
+        }
+
+        public bool DeleteType(int typeID)
+        {
+            string query = string.Empty;
+            try
+            {
+                query = $"DELETE FROM [Afe_type] WHERE Afe_type_id = {typeID}";
+                int deleted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log(" DeleteType  =>", ex.Message + "==>" + ex.StackTrace, true);
+                return false;
+            }
+        }
+
+        public bool UpdateTypes(string typesArr)
+        {
+            try
+            {
+                string query = string.Empty;
+                int updated = 0;
+                var types = JsonConvert.DeserializeObject<List<TypeModel>>(typesArr);
+                for (int i = 0; i < types.Count; i++)
+                {
+                    query += $"UPDATE [Afe_type] SET [Type] = '{types[i].Type}',[Include_gross_afe] = {types[i].Include_gross_afe},[Include_wi] = {types[i].Include_wi},[Include_nri] = {types[i].Include_nri},[Include_roy] ={types[i].Include_roy},[Include_net_afe] = {types[i].Include_net_afe},[Include_oil] = {types[i].Include_oil},[Include_gas] = {types[i].Include_gas},[Include_ngl] ={types[i].Include_ngl},[Include_boe] = {types[i].Include_boe},[Include_po] = {types[i].Include_po},[Include_pv10] = {types[i].Include_pv10},[Include_f_and_d] ={types[i].Include_f_and_d},[Include_ror] = {types[i].Include_ror},[Include_mroi] = {types[i].Include_mroi },[Afe_num_code] = '{types[i].Afe_num_code }',[CategoryID] = {types[i].CategoryID } WHERE Afe_type_id = {types[i].Afe_type_id}";
+                }
+                updated = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+                return updated > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                CommonDatabaseOperationHelper.Log("UpdateTypes =>", ex.Message + "==>" + ex.StackTrace, true);
+                throw;
+            }
+        }
         #endregion
     }
 }

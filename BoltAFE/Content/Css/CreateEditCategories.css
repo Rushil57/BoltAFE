@@ -15,8 +15,8 @@ thead {
 
 tbody {
     display: block;
-    min-height: 75vh !important;
-    height: 75vh !important;
+    min-height: 65vh !important;
+    height: 65vh !important;
     overflow: auto;
 }
     thead, tbody tr {
@@ -24,5 +24,26 @@ tbody {
         table-layout: fixed;
     }
 thead {
-    width: calc( 100% - 1em ) 
+    width: calc( 100% - 1em ) ;
+    text-align:center;
+}
+
+.txtRedBackground {
+    background-color: #FFCCCC;
+}
+
+.txtGreenBackground {
+    background-color: #E2F0D9;
+}
+.form-select {
+    padding: 0rem 2.25rem 0.375rem 0.75rem !important;
+    font-size: 0.8rem;
+}
+
+.cls-afeField{
+    width:35px;
+}
+
+.cls-afeFieldTh {
+    width: 4%;
 }
