@@ -139,14 +139,18 @@ function GetAllCategoriesTypes() {
                     updateCategoryArr.push(currCategoryArr);
                 }
             })
-            $('.cls-afeField').on('change focus blur keydown keyup keypress paste', function () {
+            $('.cls-afeField').on('change focus blur keydown keyup keypress paste', function (event) {
+
+                if (event.which != 102 && event.which != 116 && event.which != 70 && event.which != 84 && event.which != 8 && event.which != 9 && event.which != 46) {
+                    event.preventDefault();
+                }
                 let value = $(this).val();
                 if (value.toLowerCase() != 't' && value.toLowerCase() != 'f') {
                     $(this).val('');
                 }
                 updateTypeArr(this)
             })
-            $('.categoroyID > select ,.cls-type,.cls-numcode').on('change focus blur keydown keyup keypress paste', function () {
+            $('.categoroyID > select ,.cls-type,.cls-numcode').on('change focus blur keydown keyup keypress paste', function (event) {
                 updateTypeArr(this)
             })
         },
