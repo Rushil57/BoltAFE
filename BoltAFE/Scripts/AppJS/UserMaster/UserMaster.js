@@ -257,7 +257,7 @@ function BindAllUsers(data, globalAllRoles) {
     for (var i = 0; i < globalAllRoles.length; i++) {
         let roleID = globalAllRoles[i].RoleID;
         let roleName = isNullEmptyValue(globalAllRoles[i].RoleName);
-        rolesOptions += '<option value =' + roleID +' id="' + roleID + '">' + roleName + '</option>';
+        rolesOptions += '<option value="' + roleID +'" id="' + roleID + '">' + roleName + '</option>';
     }
     mainAddRoleSelectEle.html(rolesOptions);
     $("#txtSearchEmailUserMaster").val('');
@@ -270,8 +270,8 @@ function BindAllUsers(data, globalAllRoles) {
         var userName = isNullEmptyValue(data[i].User_Name);
         let approverAmount = isNullEmptyDecValue(data[i].Approver_amount);
         let currRoleID = isNullEmptyDecValue(data[i].RoleID);
-
-        let roleIndex = rolesOptions.indexOf(currRoleID) + 2;
+        
+        let roleIndex = rolesOptions.indexOf('value="' + currRoleID + '"');
         let currRolesOptions = rolesOptions.substring(0, roleIndex)
             + ' selected ' + rolesOptions.substring(roleIndex);
         _html += `<tr><td><li class="ui-state-default float-start" id="all_user_` + data[i].User_ID + `">` + userEmail + `<img class = 'fa fa-key fa-cog' id="` + userEmail + `" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAABT0lEQVRYhe2WTU7DMBCFPxCiElKDKLChO07ALdiyKRJHaIAekgooiwILFogl3IB2nbLIRDKWf5LGA5HgSVYsz4zfy4zHCfzjr2PDsbb6Sc5NZbIotgI2V3bawJnZWAZWRqBv3gqdLgF8L4NvriZAuxuAjpegE12gjtghTIkBcFzHMVmP14FmCXrABJgBSxkz4ArYDgWmyMAQeDb2sseT+KgI6Bnkb8AIOAD6wBnwKrZHPJloK2BikB867HvAu/hcagh4kPgLa/0WmMp8JD73GgIWEj+w1qfAjcwz8fnUELCU+Czgs1sJSN2GObAjm4cunVN5vriM62YgBwoZ44DfPvAhHHkqASHyE8oWzIBzg3xOpA1jow75WNbt2Dlw5HubpgIqAjudFXlBeTAXwJ34Ba/iprAFmSIL4DolWRMBBeWHJ4gUfz2+A1tr71//I/oCsWyCV9icYoQAAAAASUVORK5CYII=" style="height:24px;width:24px;" title="Reset Password"></i></li></td><td><input type="text"  id="` + userEmail + `" value='` + userName + `' class="form-control  userValue"></td><td><input type="number" value='` + approverAmount + `' class="form-control  approverAmount userValue"></td><td><select class="form-select userValue" id="select_` + userEmail + `" >` + currRolesOptions +`</select></td>`;
