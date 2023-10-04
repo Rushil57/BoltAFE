@@ -17,47 +17,51 @@
     </div>
 </div>
 <div class="row" id="divCECat">
-    <div class="col-md-9">
-        <table class="table table-borderless" id="tblTypes">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Code</th>
-                    <th class="cls-afeFieldTh">Gross AFE</th>
-                    <th class="cls-afeFieldTh">WI</th>
-                    <th class="cls-afeFieldTh">NRI</th>
-                    <th class="cls-afeFieldTh">ROY</th>
-                    <th class="cls-afeFieldTh">Net AFE</th>
-                    <th class="cls-afeFieldTh">Oil</th>
-                    <th class="cls-afeFieldTh">Gas</th>
-                    <th class="cls-afeFieldTh">NGL</th>
-                    <th class="cls-afeFieldTh">BOE</th>
-                    <th class="cls-afeFieldTh">PO</th>
-                    <th class="cls-afeFieldTh">ROR</th>
-                    <th class="cls-afeFieldTh">MROI</th>
-                    <th class="cls-afeFieldTh"></th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <div class="col-md-10">
+        <div class=" min-vh-70 overflow-auto">
+            <table class="table table-borderless" id="tblTypes">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Code</th>
+                        <th class="cls-afeFieldTh">Gross AFE</th>
+                        <th class="cls-afeFieldTh">WI</th>
+                        <th class="cls-afeFieldTh">NRI</th>
+                        <th class="cls-afeFieldTh">ROY</th>
+                        <th class="cls-afeFieldTh">Net AFE</th>
+                        <th class="cls-afeFieldTh">Oil</th>
+                        <th class="cls-afeFieldTh">Gas</th>
+                        <th class="cls-afeFieldTh">NGL</th>
+                        <th class="cls-afeFieldTh">BOE</th>
+                        <th class="cls-afeFieldTh">PO</th>
+                        <th class="cls-afeFieldTh">ROR</th>
+                        <th class="cls-afeFieldTh">MROI</th>
+                        <th class="cls-afeFieldTh"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
         <button class="btn btn-primary float-start" onclick="addType()">Add</button>
         <button class="btn btn-primary float-end" onclick="updateTypes()">Update</button>
     </div>
-    <div class="col-md-3">
-        <table class="table table-borderless" id="tblCategory">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <button class="btn btn-primary float-start mt-3" onclick="addCategory()">Add</button>
-        <button class="btn btn-primary float-end mt-3" onclick="updateCategory()">Update</button>
+    <div class="col-md-2">
+        <div class=" min-vh-70 overflow-auto">
+            <table class="table table-borderless" id="tblCategory">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-primary float-start" onclick="addCategory()">Add</button>
+        <button class="btn btn-primary float-end" onclick="updateCategory()">Update</button>
     </div>
 </div>
 @*Category Start*@
@@ -104,7 +108,7 @@
             <div class="modal-body" id="typeModelBody">
                 <div class="row mt-2">
                     <div class="col-md-4">
-                        <label>Category: </label>
+                        <label>Category:<label style="color:red">*</label> </label>
                     </div>
                     <div class="col-md-8">
                         <select class="form-select" id="mainAddTypeCategory"></select>
@@ -113,7 +117,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-4">
-                        <label>Type: </label>
+                        <label>Type:<label style="color:red">*</label> </label>
                     </div>
                     <div class="col-md-8">
                         <input type="text" id="type" class="form-control" />
@@ -122,7 +126,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-4">
-                        <label>Code: </label>
+                        <label>Code:<label style="color:red">*</label> </label>
                     </div>
                     <div class="col-md-8">
                         <input type="text" id="code" class="form-control" />

@@ -12,22 +12,11 @@ thead {
     font-size: 0.8rem !important;
 }
 
-
-tbody {
-    display: block;
-    min-height: 65vh !important;
-    height: 65vh !important;
-    overflow: auto;
-}
-    thead, tbody tr {
-        display: table;
-        table-layout: fixed;
-    }
 thead {
     width: calc( 100% - 1em ) ;
     text-align:center;
 }
-
+    
 .txtRedBackground {
     background-color: #FFCCCC;
 }
@@ -46,4 +35,13 @@ thead {
 
 .cls-afeFieldTh {
     width: 4%;
+}
+
+.cls-textCenter{
+    text-align:center;
+}
+
+
+.text-danger{
+    font-size:small;
 }

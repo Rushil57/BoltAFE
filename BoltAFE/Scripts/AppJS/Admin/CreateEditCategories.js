@@ -112,9 +112,15 @@ function GetAllCategoriesTypes() {
                     currCategoriesOptions = afeCategoriesSelect;
                 }
                 let currentCategory =
-                    afeTypesStr += '<tr><td class="categoroyID"><input type hidden class="typeID" value="' + id + '">' + currCategoriesOptions + '</td><td><input class="form-control  cls-type" type="text" value="' + type + '" id="' + id + '"></td><td><input class="form-control  cls-numcode" type="text" value="' + afeNumCode + '"></td><td><input class="form-control cls-afeField' + grossAfeCls + '" type="text" minlength="1" maxlength="1" value="' + grossAfe + '"></td><td><input class="form-control cls-afeField' + wiCls + '" type="text" minlength="1" maxlength="1" value="' + wi + '"></td><td><input class="form-control cls-afeField' + nriCls + '" type="text" minlength="1" maxlength="1" value="' + nri + '"></td><td><input class="form-control cls-afeField' + royCls + '" type="text" minlength="1" maxlength="1" value="' + roy + '"></td><td><input class="form-control cls-afeField' + netAfeCls + '" type="text" minlength="1" maxlength="1" value="' + netAfe + '"></td><td><input class="form-control cls-afeField' + oilCls + '" type="text" minlength="1" maxlength="1" value="' + oil + '"></td><td><input class="form-control cls-afeField' + gasCls + '" type="text" minlength="1" maxlength="1" value="' + gas + '"></td><td><input class="form-control cls-afeField' + nglCls + '" type="text" minlength="1" maxlength="1" value="' + ngl + '"></td><td><input class="form-control cls-afeField' + boeCls + '" type="text" minlength="1" maxlength="1" value="' + boe + '"></td><td><input class="form-control cls-afeField' + poCls + '" type="text" minlength="1" maxlength="1" value="' + po + '"></td><td><input class="form-control cls-afeField' + rorCls + '" type="text" minlength="1" maxlength="1" value="' + ror + '"></td><td><input class="form-control cls-afeField' + mroiCls + '" type="text" minlength="1" maxlength="1" value="' + mroi + '"></td><td onclick="deleteType(' + id + ')">' + trashIcon + '</td>';
+                    afeTypesStr += '<tr><td class="categoroyID"><input type hidden class="typeID" value="' + id + '">' + currCategoriesOptions + '</td><td><input class="form-control  cls-type" type="text" value="' + type + '" id="' + id + '"></td><td><input class="form-control  cls-numcode" type="text" value="' + afeNumCode + '"></td><td><input class="form-control cls-afeField' + grossAfeCls + '" type="text" minlength="1" maxlength="1" value="' + grossAfe + '"></td><td><input class="form-control cls-afeField' + wiCls + '" type="text" minlength="1" maxlength="1" value="' + wi + '"></td><td><input class="form-control cls-afeField' + nriCls + '" type="text" minlength="1" maxlength="1" value="' + nri + '"></td><td><input class="form-control cls-afeField' + royCls + '" type="text" minlength="1" maxlength="1" value="' + roy + '"></td><td><input class="form-control cls-afeField' + netAfeCls + '" type="text" minlength="1" maxlength="1" value="' + netAfe + '"></td><td><input class="form-control cls-afeField' + oilCls + '" type="text" minlength="1" maxlength="1" value="' + oil + '"></td><td><input class="form-control cls-afeField' + gasCls + '" type="text" minlength="1" maxlength="1" value="' + gas + '"></td><td><input class="form-control cls-afeField' + nglCls + '" type="text" minlength="1" maxlength="1" value="' + ngl + '"></td><td><input class="form-control cls-afeField' + boeCls + '" type="text" minlength="1" maxlength="1" value="' + boe + '"></td><td><input class="form-control cls-afeField' + poCls + '" type="text" minlength="1" maxlength="1" value="' + po + '"></td><td><input class="form-control cls-afeField' + rorCls + '" type="text" minlength="1" maxlength="1" value="' + ror + '"></td><td><input class="form-control cls-afeField' + mroiCls + '" type="text" minlength="1" maxlength="1" value="' + mroi + '"></td><td onclick="deleteType(' + id + ')">' + trashIcon + '</td></tr>';
             }
 
+            if (afeTypes.length == 0) {
+                afeTypesStr = "<tr><td colspan='16' class='cls-textCenter'>No data found.</td></tr>"
+            }
+            if (afeCategories.length == 0) {
+                afeCategoriesStr = "<tr><td colspan='2' class='cls-textCenter'>No data found.</td></tr>"
+            }
             tblTypesBodyEle.html(afeTypesStr);
             tblCategoryBodyEle.html('').html(afeCategoriesStr);
 
@@ -225,7 +231,7 @@ function saveCategory() {
     })
 
     if (!isValidCategory) {
-        alert('This category is already exists.Please enter unique name.');
+        alert('This category is already exists. Please enter unique name.');
         return;
     }
     AddLoader();
@@ -261,7 +267,7 @@ function saveCategory() {
 function deleteCategory(categoryID) {
     AddLoader();
     setTimeout(function () {
-        if (confirm('Are you sure do you want to delete this category ?') && categoryID > 0) {
+        if (confirm('Are you sure you want to delete this category ?') && categoryID > 0) {
             $.ajax({
                 url: '/Admin/DeleteCategory',
                 contentType: 'application/json; charset=utf-8',
@@ -289,7 +295,7 @@ function deleteCategory(categoryID) {
 function updateCategory() {
     AddLoader();
     setTimeout(function () {
-        if (confirm('Are you sure do you want to update categories ?') && updateCategoryArr.length > 0) {
+        if (confirm('Are you sure you want to update categories ?') && updateCategoryArr.length > 0) {
             $.ajax({
                 type: "POST",
                 url: '/Admin/UpdateCategory',
@@ -307,9 +313,6 @@ function updateCategory() {
                     RemoveLoader();
                 }
             });
-        }
-        else {
-            alert('No category updated.');
         }
         RemoveLoader();
     }, 500);
@@ -409,7 +412,7 @@ function saveType() {
 function deleteType(typeID) {
     AddLoader();
     setTimeout(function () {
-        if (confirm('Are you sure do you want to delete this type ?') && typeID > 0) {
+        if (confirm('Are you sure you want to delete this type ?') && typeID > 0) {
             $.ajax({
                 url: '/Admin/DeleteType',
                 contentType: 'application/json; charset=utf-8',
@@ -437,7 +440,7 @@ function deleteType(typeID) {
 function updateTypes() {
     AddLoader();
     setTimeout(function () {
-        if (confirm('Are you sure do you want to update types ?') && updateTypesArr.length > 0) {
+        if (confirm('Are you sure you want to update types ?') && updateTypesArr.length > 0) {
             $.ajax({
                 type: "POST",
                 url: '/Admin/UpdateTypes',
@@ -455,9 +458,6 @@ function updateTypes() {
                     RemoveLoader();
                 }
             });
-        }
-        else {
-            alert('No types updated.');
         }
         RemoveLoader();
     }, 500);
