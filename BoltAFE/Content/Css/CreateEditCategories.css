@@ -9,7 +9,8 @@ thead {
 .form-control {
     display: inline !important;
     padding: 0rem 0.75rem !important;
-    font-size: 0.8rem !important;
+    font-size: 0.80rem !important;
+    height: 27px;
 }
 
 thead {

@@ -104,7 +104,7 @@ function GetAllCategoriesTypes() {
 
                 let currCategoriesOptions = '';
                 if (currCategoryID > 0) {
-                    let categoryIndex = afeCategoriesSelect.indexOf(currCategoryID) + currCategoryID.toString().length + 1;
+                    let categoryIndex = afeCategoriesSelect.indexOf('value="' + currCategoryID + '"');
                     currCategoriesOptions = afeCategoriesSelect.substring(0, categoryIndex)
                         + ' selected ' + afeCategoriesSelect.substring(categoryIndex);
                 }
