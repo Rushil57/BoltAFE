@@ -2,8 +2,7 @@
 }
 
 .buttonStyle {
-    padding: 50px 150px 50px 150px !important;
+    padding: 2% 12% 2% 12% !important;
     border: 1px solid black;
-    margin-top: 1%;
-    margin-left : 2%;
+    margin: 1% 1% 1% 1%;
 }
