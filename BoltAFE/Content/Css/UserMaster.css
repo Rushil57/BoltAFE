@@ -32,10 +32,10 @@
     border-style: groove;
     border-width: thin;
     margin: 10px;
-    height: 400px;
+    height: calc(100vh - 180px) !important;
     padding: 20px;
     position: relative;
-    max-height: 400px;
+    max-height: calc(100vh - 180px) !important;
     overflow-y: scroll;
 }
 
