@@ -52,6 +52,11 @@ var afeHDR = '';
 var afeHdrAprvlHistory = '';
 var loadFileIFreamEle = $('#loadFileIFream');
 var afeListBack = false;
+var isAppEditSave = false;
+
+var lblAfeTypeEle = $('#lblAfeType');
+var lblAfeCategoryEle = $('#lblAfeCategory');
+var lblAfeDateEle = $('#lblAfeDate');
 $(document).ready(function () {
     $('#selectedMenu').text($('#menuCreateAFE').text());
     GetAFETypesAndCategories();
@@ -65,7 +70,7 @@ $(document).ready(function () {
         getComments();
         GetAFE();
         $('#tblPrevAppDiv').prop('hidden', false);
-         afeListBack = true;
+        afeListBack = true;
     }
 });
 
@@ -103,10 +108,14 @@ function GetAFE() {
             $('input').tooltip('dispose');
             if (afeHDR.length > 0) {
                 lblAfeNameEle.text(afeHDR[0].Afe_name);
-                $('#lblAfeType').text(afeHDR[0].Type);
-                $('#lblAfeCategory').text(afeHDR[0].Category);
+                lblAfeTypeEle.text(afeHDR[0].Type);
+                lblAfeCategoryEle.text(afeHDR[0].Category);
+
+                lblAfeTypeEle.attr('afeTypeID', afeHDR[0].Afe_type_id);
+                lblAfeCategoryEle.attr('catID', afeHDR[0].CategoryID);
+
                 lblAfeNumEle.text(afeHDR[0].Afe_num);
-                $('#lblAfeDate').text(getFormattedDate(afeHDR[0].Created_date));
+                lblAfeDateEle.text(getFormattedDate(afeHDR[0].Created_date));
                 txtAreaDescEle.text(afeHDR[0].Description);
                 afeDTLIDEle.val(afeHDR[0].Afe_econ_dtl_id);
                 txtGrossAFEEle.val(afeHDR[0].Gross_afe);
@@ -227,10 +236,10 @@ function GetAFETypesAndCategories() {
             }
             afeTypes = JSON.parse(data.AFETypes);
             afeCategories = JSON.parse(data.AFECategories);
-            
+
             let afeCategoriesStr = '<option value="0">-- Select --</option>';
 
-           
+
             for (var i = 0; i < afeCategories.length; i++) {
                 let id = afeCategories[i].Afe_category_id;
                 let category = isNullEmpty(afeCategories[i].Category) ? "" : afeCategories[i].Category;
@@ -324,11 +333,11 @@ function bindAFEDoc() {
 
         if (currDocPath != "" && $.inArray(currDocID, currentDocIDArr) == -1) {
             currentDocIDArr.push(currDocID);
-            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td onclick="openDoc(\'' + docArr[i].Doc_path.substring(1) + '\')">' + eyeIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
+            tblDocDtlBodyStr += '<tr class="' + colorClass + '"><td>' + currDocPath + '</td><td>' + currDescription + '</td><td onclick="openDoc(\'' + currDocPath.substring(1) + '\')">' + eyeIcon + '</td><td onclick="downloadFile(\'' + currDocPath.substring(1) + '\')">' + downloadIcon + '</td><td onclick="deleteDoc(' + currDocID + ')">' + currentTrashIcon + '</td></tr>';
         }
     }
     let colorClass = tblDocDtlBodyEle.length % 2 == 0 ? 'evenRowBgColor' : 'oddRowBgColor';
-    tblDocDtlBodyStr += '<tr style ="cursor: pointer"  onclick="openFilePopup()" id="trPlusRowDoc" class="' + colorClass + '"><td colspan="4">' + plusIcon + '</td></tr>';
+    tblDocDtlBodyStr += '<tr style ="cursor: pointer"  onclick="openFilePopup()" id="trPlusRowDoc" class="' + colorClass + '"><td colspan="5">' + plusIcon + '</td></tr>';
     tblDocDtlBodyEle.html('');
     tblDocDtlBodyEle.html(tblDocDtlBodyStr);
 }
@@ -522,6 +531,11 @@ function getComments() {
 }
 btnSaveEle.click(function () {
     openUserModel()
+    usersLabelEle.text('Approve');
+    btnSubmitToEle.text('Submit To');
+    btnSaveHDREle.attr('hidden', false);
+    openUserModel();
+    bindUsersList();
 })
 
 function openUserModel() {
@@ -553,11 +567,31 @@ function saveHDRAndDTL(isSubmitTo) {
         let isValidStr = 'Please enter or select ';
         let isValidStrMessage = ' ';
         let isValidSubmitToMessage = ' ';
-        let currAfeType = !isApproveAFE ? Number(afeTypeSelectEle.find(':selected').val()) : 0;
-        let currCat = !isApproveAFE ? Number(afeCatSelectEle.find(':selected').val()) : 0;
-        let currName = !isApproveAFE ? txtAFENameEle.val() : lblAfeNameEle.text();
-        let currNum = !isApproveAFE ? txtAFENumEle.val() : lblAfeNumEle.text();
-        let currDate = txtAfeDateEle.val();
+
+        let currAfeType = 0;
+        let currCat = 0;
+        let currName = '';
+        let currNum = '';
+        let currDate = new Date();
+
+        if (afeHDR.length > 0) {
+            currAfeType = Number(lblAfeTypeEle.attr('afeTypeID'));
+            currCat = Number(lblAfeCategoryEle.attr('catID'));
+            currName = lblAfeNameEle.text();
+            currNum = lblAfeNumEle.text();
+            currDate = lblAfeDateEle.text();
+            isAppEditSave = true;
+        }
+        else {
+            let afeTypeSelectVal = Number(afeTypeSelectEle.find(':selected').val());
+            let afeCatSelectVal = Number(afeCatSelectEle.find(':selected').val());
+            isAppEditSave = false;
+            currAfeType = !isApproveAFE ? afeTypeSelectVal : 0;
+            currCat = !isApproveAFE ? afeCatSelectVal : 0;
+            currName = !isApproveAFE ? txtAFENameEle.val() : lblAfeNameEle.text();
+            currNum = !isApproveAFE ? txtAFENumEle.val() : lblAfeNumEle.text();
+            currDate = txtAfeDateEle.val();
+        }
         let inboxUserID = Number($('.cls-listBox').val());
         let currInboxUserID = isSubmitTo ? inboxUserID : userIDEle.val();
         let currInboxUserEmail = isSubmitTo ? $('.cls-listBox').find(':selected').text() : userEmail;
@@ -625,7 +659,7 @@ function saveHDRAndDTL(isSubmitTo) {
             $.ajax({
                 type: "POST",
                 url: '/AFE/SaveHDRAndDTL',
-                data: JSON.stringify({ 'afeHDR': JSON.stringify(afeHDR), 'afeHDRDTL': JSON.stringify(afeHDRDTL), 'isApproveAFE': isApproveAFE }),
+                data: JSON.stringify({ 'afeHDR': JSON.stringify(afeHDR), 'afeHDRDTL': JSON.stringify(afeHDRDTL), 'isApproveAFE': isApproveAFE, 'isAppEditSave': isAppEditSave }),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 async: false,
@@ -677,7 +711,7 @@ btnApproveEle.click(function () {
     else {
         usersLabelEle.text('Approve');
         btnSubmitToEle.text('Submit To');
-        btnSaveHDREle.remove();
+        btnSaveHDREle.attr('hidden',true);
         openUserModel();
         bindUsersList();
     }
@@ -687,7 +721,7 @@ btnReturnToEle.click(function () {
     isApproveAFE = true;
     usersLabelEle.text('Return To');
     btnSubmitToEle.text('Return To');
-    btnSaveHDREle.remove();
+    btnSaveHDREle.attr('hidden', true);
     openUserModel();
     bindReturnUsersList();
 });
@@ -763,4 +797,8 @@ function bindAFENumber() {
 
 txtAfeDateEle.change(function () {
     GetTypesRecordDetails();
+})
+
+$('#btnSaveApprove').click(function () {
+    btnSaveEle.trigger('click')
 })

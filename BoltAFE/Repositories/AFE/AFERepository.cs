@@ -277,7 +277,7 @@ namespace BoltAFE.Repositories.AFE
             finally { connection.Close(); }
         }
 
-        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE,bool isDuplicateAFENum)
+        public bool SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE, bool isDuplicateAFENum, bool isAppEditSave)
         {
             var connection = CommonDatabaseOperationHelper.CreateMasterConnection();
             try
@@ -297,8 +297,23 @@ namespace BoltAFE.Repositories.AFE
                         var lastDigitChange = (Convert.ToInt32(afeNumberSplit[1]) + 1).ToString("00");
                         afeNumber = afeNumberSplit[0] + "-" + lastDigitChange;
                     }
-                     query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeNumber}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
-                    afeHDRID = connection.Query<int>(query).FirstOrDefault();
+
+                    if (!isAppEditSave)
+                    {
+                        query = $"INSERT INTO [Afe_hdr] ([Afe_name],[Afe_type_id],[Afe_category_id],[Afe_num],[Created_date],[Created_By],[Inbox_user_id]) OUTPUT Inserted.[Afe_hdr_id] VALUES ('{afeHDRValues.Afe_name}',{afeHDRValues.Afe_type_id},{afeHDRValues.Afe_category_id},'{afeNumber}','{afeHDRValues.Created_date}',{userID},{afeHDRValues.Inbox_user_id}) ;";
+                        afeHDRID = connection.Query<int>(query).FirstOrDefault();
+                        query = $"INSERT INTO [Afe_aprvl_hist_dtl] ([Afe_hdr_id],[Approver_user_id]) VALUES ({afeHDRID} ,{userID}) ; INSERT INTO [Afe_econ_dtl] ([Afe_hdr_id],[Description],[Gross_afe],[Wi],[Nri],[Roy],[Net_afe],[Oil],[Gas],[Ngl],[Boe],[Und_po],[Pv10],[F_and_d],[Ror],[Mroi],[Changed_by_user_id],[Changed_date]) VALUES ({afeHDRID},'{afeHDRDTLValues.Description}',{afeHDRDTLValues.Gross_afe},{afeHDRDTLValues.Wi},{afeHDRDTLValues.Nri},{afeHDRDTLValues.Roy},{afeHDRDTLValues.Net_afe},{afeHDRDTLValues.Oil},{afeHDRDTLValues.Gas},{afeHDRDTLValues.Ngl},{afeHDRDTLValues.Boe},{afeHDRDTLValues.Und_po},{afeHDRDTLValues.Pv10},{afeHDRDTLValues.F_and_d},{afeHDRDTLValues.Ror},{afeHDRDTLValues.Mroi},{userID},'{afeHDRDTLValues.Changed_date}')" ;
+                        
+                    }
+                    else
+                    {
+
+                        afeHDRID = afeHDRDTLValues.Afe_hdr_id;
+                        query = $"UPDATE [Afe_hdr] SET [Inbox_user_id] = {afeHDRValues.Inbox_user_id} WHERE [Afe_hdr_id] = {afeHDRID} ; UPDATE [Afe_econ_dtl] SET [Description] = '{afeHDRDTLValues.Description}',[Gross_afe] = {afeHDRDTLValues.Gross_afe},[Wi] = {afeHDRDTLValues.Wi},[Nri] = {afeHDRDTLValues.Nri},[Roy] = {afeHDRDTLValues.Roy},[Net_afe] = {afeHDRDTLValues.Net_afe},[Oil] = {afeHDRDTLValues.Oil},[Gas] = {afeHDRDTLValues.Gas},[Ngl] = {afeHDRDTLValues.Ngl},[Boe] = {afeHDRDTLValues.Boe},[Und_po] = {afeHDRDTLValues.Und_po},[Pv10] = {afeHDRDTLValues.Pv10},[F_and_d] = {afeHDRDTLValues.F_and_d},[Ror] = {afeHDRDTLValues.Ror},[Mroi] = {afeHDRDTLValues.Mroi},[Changed_by_user_id] = {userID},[Changed_date] = '{afeHDRDTLValues.Changed_date}'  WHERE [Afe_hdr_id] = {afeHDRID} ";
+                    }
+                    query += $" INSERT INTO [Afe_aprvl_hist_dtl] ([Afe_hdr_id],[Approver_user_id]) VALUES ({afeHDRID} ,{afeHDRValues.Inbox_user_id}) ;UPDATE [Afe_comments] SET [Afe_hdr_id] ={afeHDRID}   where  [User_id] = {userID} and [Afe_hdr_id] = 0 ; UPDATE [Afe_docs] SET [Afe_hdr_id] = {afeHDRID} where [User_id] ={userID} and [Afe_hdr_id] = 0";
+                    int insertedORUpdated = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+
                 }
                 else
                 {
@@ -306,8 +321,7 @@ namespace BoltAFE.Repositories.AFE
                     query = $"UPDATE [Afe_hdr] SET [Inbox_user_id] = {afeHDRValues.Inbox_user_id} WHERE [Afe_hdr_id] = {afeHDRID};";
                     connection.Query<int>(query).FirstOrDefault();
                 }
-                query = $"INSERT INTO [Afe_aprvl_hist_dtl] ([Afe_hdr_id],[Approver_user_id]) VALUES ({afeHDRID} ,{afeHDRValues.Inbox_user_id}) ; INSERT INTO [Afe_econ_dtl] ([Afe_hdr_id],[Description],[Gross_afe],[Wi],[Nri],[Roy],[Net_afe],[Oil],[Gas],[Ngl],[Boe],[Und_po],[Pv10],[F_and_d],[Ror],[Mroi],[Changed_by_user_id],[Changed_date]) VALUES ({afeHDRID},'{afeHDRDTLValues.Description}',{afeHDRDTLValues.Gross_afe},{afeHDRDTLValues.Wi},{afeHDRDTLValues.Nri},{afeHDRDTLValues.Roy},{afeHDRDTLValues.Net_afe},{afeHDRDTLValues.Oil},{afeHDRDTLValues.Gas},{afeHDRDTLValues.Ngl},{afeHDRDTLValues.Boe},{afeHDRDTLValues.Und_po},{afeHDRDTLValues.Pv10},{afeHDRDTLValues.F_and_d},{afeHDRDTLValues.Ror},{afeHDRDTLValues.Mroi},{userID},'{afeHDRDTLValues.Changed_date}') ; UPDATE [Afe_comments] SET [Afe_hdr_id] ={afeHDRID}   where  [User_id] = {userID} and [Afe_hdr_id] = 0 ; UPDATE [Afe_docs] SET [Afe_hdr_id] = {afeHDRID} where [User_id] ={userID} and [Afe_hdr_id] = 0";
-                int inserted = CommonDatabaseOperationHelper.InsertUpdateDelete(query);
+
                 if (userID != afeHDRValues.Inbox_user_id)
                 {
                     Helper.SendEmailOfAFEApprrove(afeHDRValues.Inbox_user_email, userEmail, afeHDRValues.Afe_name, afeHDRValues.Afe_num, _adminRepository);

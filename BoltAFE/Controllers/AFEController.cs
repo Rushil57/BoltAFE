@@ -295,7 +295,7 @@ namespace BoltAFE.Controllers
 
         #region Save AFE and DTL
 
-        public string SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE)
+        public string SaveHDRAndDTL(string afeHDR, string afeHDRDTL, bool isApproveAFE,bool isAppEditSave = false)
         {
             bool isValid = false;
             bool isDuplicateAFENum = false;
@@ -305,10 +305,13 @@ namespace BoltAFE.Controllers
                 var userID = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserId"]);
                 if (userID > 0)
                 {
-                    isDuplicateAFENum = isApproveAFE ? isDuplicateAFENum : _aFERepository.CheckIfDuplicateAFENum(afeHDR);
-                    var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL, isApproveAFE, isDuplicateAFENum);
+                    if (!isAppEditSave)
+                    {
+                        isDuplicateAFENum = isApproveAFE ? isDuplicateAFENum : _aFERepository.CheckIfDuplicateAFENum(afeHDR);
+                    }
+                    var isFileNameUpdated = _aFERepository.SaveHDRAndDTL(afeHDR, afeHDRDTL, isApproveAFE, isDuplicateAFENum, isAppEditSave);
                     isValid = true;
-                    data = "AFE Header and Details saved successfully.";
+                    data = isAppEditSave ? "AFE Header and Details updated successfully." : "AFE Header and Details saved successfully.";
 
                 }
             }

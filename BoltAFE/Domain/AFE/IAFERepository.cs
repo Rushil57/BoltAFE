@@ -17,7 +17,7 @@
         bool DeleteAFEHDR(int afeHDRID);
 
         bool CheckIfDuplicateAFENum(string afeHDR);
-        bool SaveHDRAndDTL(string afeHDR,string afeHDRDTL,bool isApproveAFE, bool isDuplicateAFENum);
+        bool SaveHDRAndDTL(string afeHDR,string afeHDRDTL,bool isApproveAFE, bool isDuplicateAFENum,bool isAppEditSave);
 
         bool ApproveAFE(int afeHDRID);
     }
